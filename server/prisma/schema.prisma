@@ -1,0 +1,99 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Employee {
+  id           Int        @id @default(autoincrement())
+  name         String
+  role         String
+  supervisor   Supervisor @relation(fields: [supervisorId], references: [id])
+  supervisorId Int
+  desk         Desk?      @relation(fields: [deskId], references: [id])
+  deskId       Int?       @unique
+  response     Response[]
+}
+
+model Supervisor {
+  id        Int        @id @default(autoincrement())
+  name      String
+  role      String
+  employees Employee[]
+  Team      Team       @relation(fields: [teamId], references: [id])
+  teamId    Int
+}
+
+model Team {
+  id         Int          @id @default(autoincrement())
+  name       String
+  supervisor Supervisor[]
+  Room       Room         @relation(fields: [roomId], references: [id])
+  roomId     Int
+  product    Product      @relation(fields: [productId], references: [id])
+  productId  Int
+}
+
+model Building {
+  id     Int     @id @default(autoincrement())
+  name   String  @default("immeuble")
+  stages Stage[]
+}
+
+model Stage {
+  id         Int       @id @default(autoincrement())
+  name       String
+  rooms      Room[]
+  Building   Building? @relation(fields: [buildingId], references: [id])
+  buildingId Int?
+}
+
+model Room {
+  id      Int    @id @default(autoincrement())
+  name    String
+  Stage   Stage  @relation(fields: [stageId], references: [id])
+  stageId Int
+  teams   Team[]
+  desks   Desk[]
+}
+
+model Desk {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  employee Employee?
+  Room     Room      @relation(fields: [roomId], references: [id])
+  roomId   Int
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  name      String
+  day       String
+  beginTime DateTime
+  endTime   DateTime
+}
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+  Team Team[]
+}
+
+model Question {
+  id       Int        @id @default(autoincrement())
+  question String
+  category String
+  response Response[]
+}
+
+model Response {
+  id         Int      @id @default(autoincrement())
+  response   String
+  Question   Question @relation(fields: [questionID], references: [id])
+  questionID Int
+  Employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+}
