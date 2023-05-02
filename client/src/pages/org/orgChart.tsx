@@ -37,7 +37,7 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
             .attr("stroke", "black")
             .attr("stroke-width", 6.5)
         })
-        .compact(!!(compact++ % 2)).render().fit()
+        //.compact(!!(compact++ % 2)).render().fit()
         /*.onNodeClick((d)=>chart.setHighlighted(d).render())*/
         .buttonContent((node) => {
           return renderToStaticMarkup(
@@ -49,8 +49,8 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
             <Card {...d} />
           );
         }).svgHeight(850).render()
-        //.setCentered(9).initialZoom(0.3).render();
-        .setCentered(13).setHighlighted(13).initialZoom(0.25).render();
+      //.setCentered(9).initialZoom(0.3).render();
+      // .setCentered(13).setHighlighted(13).initialZoom(0.25).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
 
     }
