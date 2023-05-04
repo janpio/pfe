@@ -99,8 +99,11 @@
 }
 .org-chart > svg {
   margin-top: -10px;
+  margin-left: -80px;
   height: 108%;
-  background-color: #d2f6cf;
+  width:115%;
+  background-color: rgb(221, 218, 218); /* background-color: rgb(221, 218, 218);*  #d2f6cf; */
+
 }
 
 .expand-btn > span:last-child {
@@ -133,7 +136,7 @@ align-items: center;
 width: 820px;
 /*border: 1px solid red;*/
 height: 600px;
-background-image: url("./desk.png");
+background-image: url("./deskewi.png");
 background-size: cover;
 background-position: -20px -50px ;
 border-radius: 50px;

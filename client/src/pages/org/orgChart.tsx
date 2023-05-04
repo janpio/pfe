@@ -8,36 +8,35 @@ import * as d3 from "d3";
 import { Button, Theme, useTheme } from "@mui/material";
 
 interface OrganizationalChartProps {
-  data: Employee[];
+  data: any //Employee[];
 }
 
 const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
 
   const d3Container = useRef<any>(null);
   const chart = new OrgChart();
+
   const handleFullScreen = () => {
     chart.fullscreen();
     chart.setCentered(13);
     chart.render()
   };
-
-
   useLayoutEffect(() => {
     let compact = 0;
     if (data && d3Container.current) {
       chart
         .container(d3Container.current)
         .data(data)
-        .nodeWidth((d: any) => d.data.positionName ? 830 : 630)
-        .nodeHeight((d: any) => d.data.positionName ? 620 : 420)
-        .childrenMargin((d: any) => 120)
+        .nodeWidth((d: any) => d.data.role ? 830 : 630)
+        .nodeHeight((d: any) => d.data.role ? 620 : 420)
+        .childrenMargin((d: any) => 200)
         .siblingsMargin((d: any) => 80)
         .linkUpdate(function (this: HTMLElement, d, i, arr) {
           d3.select(this)
             .attr("stroke", "black")
             .attr("stroke-width", 6.5)
         })
-        //.compact(!!(compact++ % 2)).render().fit()
+        .compact(!!(compact++ % 2)).render().fit()
         /*.onNodeClick((d)=>chart.setHighlighted(d).render())*/
         .buttonContent((node) => {
           return renderToStaticMarkup(
@@ -48,9 +47,9 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
           return renderToStaticMarkup(
             <Card {...d} />
           );
-        }).svgHeight(850).render()
-      //.setCentered(9).initialZoom(0.3).render();
-      // .setCentered(13).setHighlighted(13).initialZoom(0.25).render();
+        }).svgHeight(880).render()
+        //.setCentered(9).initialZoom(0.3).render();
+        .setCentered("1-1-1-1-2-2").setHighlighted("1-1-1-1-2-2").initialZoom(0.33).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
 
     }

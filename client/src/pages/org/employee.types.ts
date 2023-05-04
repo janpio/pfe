@@ -1,5 +1,5 @@
 export interface Employee {
-    id?: number,
+    id?: number | string,
     parentId?: string | number,
     name?: string,
     positionName?: string,
@@ -11,4 +11,5 @@ export interface Employee {
     description?: string,
     imageUrl?: string,
     _directSubordinates?: number
+    role?: string
 }

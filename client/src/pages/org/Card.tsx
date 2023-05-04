@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import "./styles.css";
 //import styled from "styled-components";
 
-const Card: FC<any> = ({ data: { name, imageUrl, positionName, team, _directSubordinates } }) => {
+const Card: FC<any> = ({ data: { name, imageUrl, role, positionName, team, _directSubordinates } }) => {
   return (
     <div>
       {name === "immeuble" ?
@@ -36,7 +36,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, positionName, team, _directSubo
                     {name || team}
                   </h1>
                   <h1 className="job">
-                    {positionName}
+                    {role}
                   </h1>
                 </div>
               </div>

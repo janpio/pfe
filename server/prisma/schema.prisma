@@ -12,6 +12,7 @@ model Employee {
   name         String
   role         String
   supervisor   Supervisor @relation(fields: [supervisorId], references: [id])
+  image        String     @default("")
   supervisorId Int
   desk         Desk?      @relation(fields: [deskId], references: [id])
   deskId       Int?       @unique
@@ -22,6 +23,7 @@ model Supervisor {
   id        Int        @id @default(autoincrement())
   name      String
   role      String
+  image     String     @default("")
   employees Employee[]
   Team      Team       @relation(fields: [teamId], references: [id])
   teamId    Int
@@ -31,10 +33,13 @@ model Team {
   id         Int          @id @default(autoincrement())
   name       String
   supervisor Supervisor[]
+  image      String       @default("")
   Room       Room         @relation(fields: [roomId], references: [id])
   roomId     Int
   product    Product      @relation(fields: [productId], references: [id])
   productId  Int
+  Stage      Stage?       @relation(fields: [stageId], references: [id])
+  stageId    Int?
 }
 
 model Building {
@@ -47,6 +52,8 @@ model Stage {
   id         Int       @id @default(autoincrement())
   name       String
   rooms      Room[]
+  teams      Team[]
+  image      String    @default("")
   Building   Building? @relation(fields: [buildingId], references: [id])
   buildingId Int?
 }
@@ -56,6 +63,7 @@ model Room {
   name    String
   Stage   Stage  @relation(fields: [stageId], references: [id])
   stageId Int
+  image   String @default("")
   teams   Team[]
   desks   Desk[]
 }
