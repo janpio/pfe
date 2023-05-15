@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 import PageContainer from '../../components/container/PageContainer';
-import Logo from '../../layouts/full/shared/logo/Logo';
-import AuthLogin from './auth/AuthLogin';
+import AuthLogin from './components/LoginForm';
+import FisLogo from '/src/assets/images/logos/FIS.png';
 
 const Login = () => {
 
@@ -36,7 +36,7 @@ const Login = () => {
           >
             <Card elevation={9} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: '500px' }}>
               <Box display="flex" alignItems="center" justifyContent="center">
-                <Logo />
+                <img src={FisLogo} alt="logo" height='70%' width='70%' />
               </Box>
               <AuthLogin />
             </Card>

@@ -1,6 +1,5 @@
-import React from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import "./styles.css";
+import "../styles.css";
 import { FC } from 'react';
 
 

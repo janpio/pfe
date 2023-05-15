@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import {
     Box,
     Typography,
@@ -8,72 +7,76 @@ import {
     Stack,
     Checkbox
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form'
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 
-interface AuthLoginProps {
-    title?: string;
-    subtitle: ReactNode;
-}
 
-
-const AuthLogin = ({ title, subtitle }: AuthLoginProps) => (
+const AuthLogin = () => (
     <>
-        {title ? (
-            <Typography fontWeight="700" variant="h2" mb={1}>
-                {title}
-            </Typography>
-        ) : null}
+        <form>
 
-        <Stack>
-            <Box sx={{ mt: '20px' }}>
-                <Typography variant="subtitle1"
-                    fontWeight={600} component="label" htmlFor='username' mb="5px">Username</Typography>
-                <CustomTextField id="username" variant="outlined" fullWidth />
-            </Box>
-            <Box mt="25px">
-                <Typography variant="subtitle1"
-                    fontWeight={600} component="label" htmlFor='password' mb="5px" >Password</Typography>
-                <CustomTextField id="password" type="password" variant="outlined" fullWidth />
-            </Box>
-            <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
-                <FormGroup>
+            <Stack>
+                <Box sx={{ mt: '20px' }}>
+                    <Typography variant="subtitle1"
+                        fontWeight={600} component="label" htmlFor='email' mb="5px">Email</Typography>
+                    <CustomTextField id="email" variant="outlined" fullWidth />
+                </Box>
+                <Box mt="25px">
+                    <Typography variant="subtitle1"
+                        fontWeight={600} component="label" htmlFor='password' mb="5px" >Password</Typography>
+                    <CustomTextField id="password" type="password" variant="outlined" fullWidth />
+                </Box>
+                <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
+                    {/*<FormGroup>
                     <FormControlLabel
-                        control={<Checkbox defaultChecked />}
-                        label="Remeber this Device"
+                    control={<Checkbox defaultChecked />}
+                    label="Remeber this Device"
                     />
-                </FormGroup>
-                <Typography
-                    component={Link}
-                    to="/"
-                    fontWeight="500"
+                </FormGroup>*/}
+                    <Typography
+                        fontWeight="600"
+                        sx={{
+                            textDecoration: 'none',
+                            color: 'primary.main',
+                        }}
+                    >
+                        Forgot Password ?
+                    </Typography>
+                </Stack>
+            </Stack>
+            <Box>
+                <Button
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    type="submit"
                     sx={{
-                        textDecoration: 'none',
-                        color: 'primary.main',
+                        color: 'white', "&:hover": {
+                            backgroundColor: "#49be25",
+                        },
                     }}
                 >
-                    Forgot Password ?
-                </Typography>
+                    Sign In
+                </Button>
+            </Box>
+            <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
+                {/*<Typography color="textSecondary" variant="h6" fontWeight="500">
+                      New to FIS?
+                    </Typography>
+                    <Typography
+                      component={Link}
+                      to="/auth/register"
+                      fontWeight="600"
+                      sx={{
+                        textDecoration: 'none',
+                        color: 'primary.main',
+                      }}
+                    >
+                      Create an account
+                    </Typography>*/}
             </Stack>
-        </Stack>
-        <Box>
-            <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                fullWidth
-                component={Link}
-                to="/"
-                type="submit"
-                sx={{
-                    color: 'white', "&:hover": {
-                        backgroundColor: "#49be25",
-                    },
-                }}            >
-                Sign In
-            </Button>
-        </Box>
-        {subtitle}
+        </form>
     </>
 );
 

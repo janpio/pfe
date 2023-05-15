@@ -99,7 +99,7 @@
 }
 .org-chart > svg {
   margin-top: -10px;
-  margin-left: -80px;
+  margin-left: -150px;
   height: 108%;
   width:115%;
   background-color: rgb(221, 218, 218); /* background-color: rgb(221, 218, 218);*  #d2f6cf; */
@@ -136,7 +136,7 @@ align-items: center;
 width: 820px;
 /*border: 1px solid red;*/
 height: 600px;
-background-image: url("./deskewi.png");
+background-image: url("../../assets/images/orgchart/deskewi.png");
 background-size: cover;
 background-position: -20px -50px ;
 border-radius: 50px;
@@ -147,7 +147,7 @@ overflow: hidden;
 .immeubleContainer{
 width: 620px;
 height: 400px;
-background-image: url("./building.jpg");
+background-image: url("../../assets/images/orgchart/building.jpg");
 background-size: cover;
 border-radius: 50px;
 }

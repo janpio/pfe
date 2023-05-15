@@ -1,14 +1,14 @@
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { OrgChart } from "d3-org-chart";
 import CustomExpandButton from "./customExpandButton";
 import Card from "./Card";
-import { Employee } from "./employee.types";
+import { Node } from "../types";
 import * as d3 from "d3";
 import { Button, Theme, useTheme } from "@mui/material";
 
 interface OrganizationalChartProps {
-  data: any //Employee[];
+  data: Node[] | undefined;
 }
 
 const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
@@ -29,7 +29,7 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
         .data(data)
         .nodeWidth((d: any) => d.data.role ? 830 : 630)
         .nodeHeight((d: any) => d.data.role ? 620 : 420)
-        .childrenMargin((d: any) => 200)
+        .childrenMargin((d: any) => 130)
         .siblingsMargin((d: any) => 80)
         .linkUpdate(function (this: HTMLElement, d, i, arr) {
           d3.select(this)
@@ -47,9 +47,9 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
           return renderToStaticMarkup(
             <Card {...d} />
           );
-        }).svgHeight(880).render()
+        }).svgHeight(850).render()
         //.setCentered(9).initialZoom(0.3).render();
-        .setCentered("1-1-1-1-2-2").setHighlighted("1-1-1-1-2-2").initialZoom(0.33).render();
+        .setCentered("1-1-1-1-2-6").setHighlighted("1-1-1-1-2-6").initialZoom(0.33).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
 
     }

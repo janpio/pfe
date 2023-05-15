@@ -1,8 +1,7 @@
-import React, { FC } from "react";
-import "./styles.css";
-//import styled from "styled-components";
+import { FC } from "react";
+import "../styles.css";
 
-const Card: FC<any> = ({ data: { name, imageUrl, role, positionName, team, _directSubordinates } }) => {
+const Card: FC<any> = ({ data: { name, imageUrl, role, team, _directSubordinates } }) => {
   return (
     <div>
       {name === "immeuble" ?

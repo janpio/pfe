@@ -8,25 +8,29 @@ generator client {
 }
 
 model Employee {
-  id           Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   name         String
-  role         String
-  supervisor   Supervisor @relation(fields: [supervisorId], references: [id])
-  image        String     @default("")
-  supervisorId Int
-  desk         Desk?      @relation(fields: [deskId], references: [id])
-  deskId       Int?       @unique
+  email        String      @unique @default("")
+  password     String      @default("")
+  role         String?
+  supervisor   Supervisor? @relation(fields: [supervisorId], references: [id])
+  image        String?     @default("")
+  supervisorId Int?
+  desk         Desk?       @relation(fields: [deskId], references: [id])
+  deskId       Int?        @unique
   response     Response[]
 }
 
 model Supervisor {
   id        Int        @id @default(autoincrement())
   name      String
-  role      String
-  image     String     @default("")
+  email     String     @default("")
+  password  String     @default("")
+  role      String?
+  image     String?    @default("")
   employees Employee[]
-  Team      Team       @relation(fields: [teamId], references: [id])
-  teamId    Int
+  Team      Team?      @relation(fields: [teamId], references: [id])
+  teamId    Int?
 }
 
 model Team {

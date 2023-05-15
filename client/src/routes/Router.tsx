@@ -1,49 +1,44 @@
 import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
+import RequireAuth from './RequireAuth';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 
-/* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
-
-/* ****Pages***** */
-const Org = Loadable(lazy(() => import('../pages/org')))
+const Org = Loadable(lazy(() => import('../pages/orgchart')))
 const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')))
 const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')))
 const Icons = Loadable(lazy(() => import('../views/icons/Icons')))
 const TypographyPage = Loadable(lazy(() => import('../views/utilities/TypographyPage')))
 const Shadow = Loadable(lazy(() => import('../views/utilities/Shadow')))
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
-const Register = Loadable(lazy(() => import('../views/authentication/Register')));
-const Login = Loadable(lazy(() => import('../views/authentication/Login')));
+const Register = Loadable(lazy(() => import('../pages/signup/Register')));
+const Login = Loadable(lazy(() => import('../pages/login/Login')));
 
-const Router = [
-  {
-    path: '/',
-    element: <FullLayout />,
-    children: [
-      { path: '/', element: <Navigate to="/dashboard" /> },
-      { path: '/teams', exact: true, element: <Org /> },
-      { path: '/invitations', exact: true, element: <div></div> },
-      { path: '/dashboard', exact: true, element: <Dashboard /> },
-      { path: '/sample-page', exact: true, element: <SamplePage /> },
-      { path: '/icons', exact: true, element: <Icons /> },
-      { path: '/ui/typography', exact: true, element: <TypographyPage /> },
-      { path: '/ui/shadow', exact: true, element: <Shadow /> },
-      { path: '*', element: <Navigate to="/auth/404" /> },
-    ],
-  },
-  {
-    path: '/auth',
-    element: <BlankLayout />,
-    children: [
-      { path: '404', element: <Error /> },
-      { path: 'test', element: <Org /> },
-      { path: '/auth/register', element: <Register /> },
-      { path: '/auth/login', element: <Login /> },
-      { path: '*', element: <Navigate to="/auth/404" /> },
-    ],
-  },
-];
 
-export default Router;
+const Router = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<FullLayout />} >
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/teams" element={<Org />} />
+          <Route path="/invitations" element={<div></div>} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/sample-page" element={<SamplePage />} />
+          <Route path="/icons" element={<Icons />} />
+          <Route path="/ui/typography" element={<TypographyPage />} />
+          <Route path="/ui/shadow" element={<Shadow />} />
+          <Route path="*" element={<Navigate to="/auth/404" />} />
+        </Route>
+      </Route>
+      <Route path="/auth" element={<BlankLayout />} >
+        <Route path="404" element={<Error />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/auth/404" />} />
+      </Route>
+    </Routes>)
+}
+
+export default Router
