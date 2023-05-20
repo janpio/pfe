@@ -1,5 +1,5 @@
-/*import { MdClose } from "react-icons/md";
-import "./styles.css";
+import { MdClose } from "react-icons/md";
+import "../styles.css";
 
 export interface Employee {
   id: number,
@@ -19,12 +19,12 @@ export interface Employee {
 interface EmployeeInterface {
 
   handleClose: () => void,
-  employee: Employee | undefined,
-  employees: Array<Employee>
+  employee: Employee | any,
+  employees: any
 
 }
 
-const EmployeeDetailsCard = (props: EmployeeInterface) => {
+const EmployeeDetailsCard = (props: any) => {
   return (<div className="card">
     <button className="card-close-btn" onClick={props.handleClose}>
       <MdClose />
@@ -70,7 +70,7 @@ const EmployeeDetailsCard = (props: EmployeeInterface) => {
         <div className="card-body">
           {props.employees
             .filter(
-              (employee: Employee) => employee.parentId === props.employee?.id.toString()
+              (employee: Employee) => employee.parentId === props?.employee?.id.toString()
             )
             .map((employee: Employee) => (
               <div className="card-item-team" key={employee.id}>
@@ -95,4 +95,3 @@ const EmployeeDetailsCard = (props: EmployeeInterface) => {
 
 
 export default EmployeeDetailsCard;
-*/

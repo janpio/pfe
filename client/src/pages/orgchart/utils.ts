@@ -6,7 +6,6 @@ export const transformData = (orgData: any) => {
             parentId: "",
 
         };
-
         const stageNodes = building.stages.map((stage: any) => {
             const stageId = `${building.id}-${stage.id}`;
             const stageNode = {
@@ -41,6 +40,7 @@ export const transformData = (orgData: any) => {
                         const supervisorNode = {
                             id: supervisorId,
                             name: supervisor.name,
+                            email: supervisor.email,
                             parentId: teamId,
                             role: supervisor.role,
                             imageUrl: supervisor.image
@@ -50,6 +50,7 @@ export const transformData = (orgData: any) => {
                             const employeeNode = {
                                 id: employeeId,
                                 name: employee.name,
+                                email: employee.email,
                                 parentId: supervisorId,
                                 role: employee.role,
                                 imageUrl: employee.image
@@ -74,3 +75,39 @@ export const transformData = (orgData: any) => {
 
     return transformedData.flat();
 };
+
+export const getNodeID = (jsonData: any, email: any) => {
+
+    function findId(items: any, email: any) {
+        for (const item of items) {
+            if (item.email === email) {
+                return item.id;
+            }
+        }
+        return null;
+    }
+
+    const id = findId(jsonData, email);
+    return id;
+}
+
+
+export const getNodeInfo = (jsonData: any, id: any) => {
+
+    function findNode(items: any, id: any) {
+        for (const item of items) {
+            if (item.id === id) {
+                return item;
+            } else if (item.children) {
+                const childId: any = findNode(item.children, id);
+                if (childId) {
+                    return item.children;
+                }
+            }
+        }
+        return null;
+    }
+
+    const node = findNode(jsonData, id);
+    return node;
+}

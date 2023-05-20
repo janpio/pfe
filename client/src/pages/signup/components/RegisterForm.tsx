@@ -1,6 +1,7 @@
-import { Box, Typography, Button, TextField, Alert, Snackbar } from '@mui/material';
+import { Box, Typography, Button, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,8 +20,7 @@ export type RegisterInput = TypeOf<typeof registerSchema>;
 
 const RegisterForm = () => {
     const store = useAuthStore()
-    //const navigate = useNavigate()
-    //const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
 
     const {
         register,
@@ -43,13 +43,7 @@ const RegisterForm = () => {
             },
             onSuccess({ token, user }) {
                 store.login(user, token)
-                localStorage.setItem("user", JSON.stringify({ user, token }));
                 store.setRequestLoading(false);
-                /*              setOpen(true)
-                setTimeout(() => {
-                    navigate("/teams");
-                }, 3000);*/
-                console.log(store)
             },
 
             onError(error: any) {
@@ -122,9 +116,7 @@ const RegisterForm = () => {
                 </Box>
 
             </form>
-            {/*<Snackbar open={open} >
-                <Alert severity='success' sx={{ width: '100%' }}>Accout created ,you will be redirected </Alert>
-                    </Snackbar>*/}
+
         </>
     )
 }

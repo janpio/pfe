@@ -6,7 +6,6 @@ import useAuthStore from './store';
 import { ToastContainer } from 'react-toastify';
 import { GenericResponse } from './features/api/types';
 
-
 function App() {
 
   const store = useAuthStore()
@@ -24,7 +23,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router />
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1500} />
       </ThemeProvider>
     </>
   );

@@ -24,9 +24,9 @@ model Employee {
 model Supervisor {
   id        Int        @id @default(autoincrement())
   name      String
-  email     String     @default("")
+  email     String     @unique @default("")
   password  String     @default("")
-  role      String?
+  role      String?    @default("")
   image     String?    @default("")
   employees Employee[]
   Team      Team?      @relation(fields: [teamId], references: [id])

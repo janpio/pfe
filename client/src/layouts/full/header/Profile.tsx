@@ -10,8 +10,6 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Alert,
-  Snackbar
 } from '@mui/material';
 import { IconListCheck, IconMail, IconUser } from '@tabler/icons';
 import ProfileImg from '/src/assets/images/profile/user-1.jpg';
@@ -20,8 +18,9 @@ const Profile = () => {
 
   const store = useAuthStore()
 
+  const { user } = store
+
   const handleLogout = () => {
-    localStorage.removeItem("user");
     store.logout()
   }
 
@@ -50,7 +49,7 @@ const Profile = () => {
           onClick={handleClick2}
         >
           <Avatar
-            src={ProfileImg}
+            src={user?.image || ProfileImg}
             alt={ProfileImg}
             sx={{
               width: 35,

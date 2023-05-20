@@ -23,7 +23,7 @@ export type LoginInput = TypeOf<typeof loginSchema>;
 const LoginForm = () => {
 
     const store = useAuthStore();
-    const navigate = useNavigate()
+    //  const navigate = useNavigate()
 
     const {
         register,
@@ -47,12 +47,12 @@ const LoginForm = () => {
             onSuccess({ token, user }) {
                 store.setRequestLoading(false);
                 store.login(user, token)
-                localStorage.setItem("user", JSON.stringify({ user, token }));
-                toast.success("Successfully logged in", { position: "bottom-center" })
-                setTimeout(() => {
+                toast.success("Successfully logged in", { position: "top-center" })
+                //     navigate('/dashboard')
+                /*      const timeout = setTimeout(() => {
                     navigate('/dashboard')
                 }, 3400);
-
+                clearTimeout(timeout);*/
             },
             onError(error: any) {
                 store.setRequestLoading(false);

@@ -3,6 +3,7 @@ import prisma from '../../prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { excludeField } from './utils';
+import { Employee, Supervisor } from '@prisma/client';
 
 export const Register = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
@@ -16,7 +17,7 @@ export const Register = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Email already in use' });
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = await prisma.employee.create({
+        const newUser: Employee = await prisma.employee.create({
             data: {
                 name: name,
                 email: email,
@@ -38,12 +39,24 @@ export const Register = async (req: Request, res: Response) => {
 export const Login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
-        const user = await prisma.employee.findUnique({
+        const supervisor: Supervisor | null = await prisma.supervisor.findUnique({
             where: {
                 email
             },
-        });
+        })
 
+        const employee: Employee | null = await prisma.employee.findUnique({
+            where: {
+                email
+            },
+        })
+        let user: Employee | Supervisor | null = null;
+
+        if (supervisor) {
+            user = supervisor;
+        } else if (employee) {
+            user = employee;
+        }
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({ message: 'Invalid email or password' });
@@ -55,6 +68,7 @@ export const Login = async (req: Request, res: Response) => {
         res.status(200).json({ token, user: userWithoutPassword });
 
     } catch (err: any) {
+
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };

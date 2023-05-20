@@ -12,7 +12,6 @@ const Index = () => {
 
     const store = useAuthStore()
 
-
     const { isLoading, data } = useQuery<Node[], any>('orgData', () => getOrgChartData(store.token), {
         retry: 2
         , onError(error: any) {
@@ -23,6 +22,7 @@ const Index = () => {
                     localStorage.removeItem("user");
                     store.logout()
                 }, 3400);
+                // clearTimeout(time)
             }
             else if (error.response.data.error === "Invalid Token") {
                 toast.error(`${error.response.data.error}, Login again`,
@@ -31,6 +31,7 @@ const Index = () => {
                     localStorage.removeItem("user");
                     store.logout()
                 }, 3400);
+                //  clearTimeout(time)
             }
         }
     });
