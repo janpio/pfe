@@ -42,7 +42,7 @@ export const transformData = (orgData: any) => {
                             name: supervisor.name,
                             email: supervisor.email,
                             parentId: teamId,
-                            role: supervisor.role,
+                            position: supervisor.position,
                             imageUrl: supervisor.image
                         };
                         const employeeNodes = supervisor.employees.map((employee: any) => {
@@ -52,8 +52,11 @@ export const transformData = (orgData: any) => {
                                 name: employee.name,
                                 email: employee.email,
                                 parentId: supervisorId,
-                                role: employee.role,
-                                imageUrl: employee.image
+
+                                position: employee.position,
+                                imageUrl: employee.image,
+                                responses: employee.response
+
                             };
                             return employeeNode;
                         });
@@ -76,33 +79,28 @@ export const transformData = (orgData: any) => {
     return transformedData.flat();
 };
 
-export const getNodeID = (jsonData: any, email: any) => {
+export const getNodeByEmail = (jsonData: any, email: any) => {
 
     function findId(items: any, email: any) {
         for (const item of items) {
             if (item.email === email) {
-                return item.id;
+                return item;
             }
         }
         return null;
     }
 
-    const id = findId(jsonData, email);
-    return id;
+    const node = findId(jsonData, email);
+    return node;
 }
 
 
-export const getNodeInfo = (jsonData: any, id: any) => {
+export const getNodeById = (jsonData: any, id: any) => {
 
     function findNode(items: any, id: any) {
         for (const item of items) {
             if (item.id === id) {
                 return item;
-            } else if (item.children) {
-                const childId: any = findNode(item.children, id);
-                if (childId) {
-                    return item.children;
-                }
             }
         }
         return null;
@@ -111,3 +109,20 @@ export const getNodeInfo = (jsonData: any, id: any) => {
     const node = findNode(jsonData, id);
     return node;
 }
+
+
+export const getTeammatesNodes = (jsonData: any, parentId: any) => {
+    const nodes: any = [];
+
+    function findNodes(items: any, parentId: any) {
+        for (const item of items) {
+            if (item.parentId === parentId) {
+                nodes.push(item);
+            }
+        }
+        return null
+    }
+
+    findNodes(jsonData, parentId);
+    return nodes;
+};

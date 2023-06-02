@@ -4,15 +4,15 @@ import { getOrgChartData } from '../../features/api/api';
 import { CircularProgress } from '@mui/material';
 import { useQuery } from 'react-query';
 import { Node } from './types';
-import useAuthStore from '../../store';
 import { toast } from 'react-toastify'
-
+import { useStore } from '../../state/store';
 
 const Index = () => {
 
-    const store = useAuthStore()
+    const token = useStore((state: any) => state.token)
+    const logout = useStore((state: any) => state.logout)
 
-    const { isLoading, data } = useQuery<Node[], any>('orgData', () => getOrgChartData(store.token), {
+    const { isLoading, data } = useQuery<Node[], any>('orgData', () => getOrgChartData(token), {
         retry: 2
         , onError(error: any) {
             if (error.response.data.error === "Expired Token") {
@@ -20,7 +20,7 @@ const Index = () => {
                     { position: 'bottom-center' })
                 setTimeout(() => {
                     localStorage.removeItem("user");
-                    store.logout()
+                    logout()
                 }, 3400);
                 // clearTimeout(time)
             }
@@ -29,7 +29,7 @@ const Index = () => {
                     { position: 'bottom-center' })
                 setTimeout(() => {
                     localStorage.removeItem("user");
-                    store.logout()
+                    logout()
                 }, 3400);
                 //  clearTimeout(time)
             }

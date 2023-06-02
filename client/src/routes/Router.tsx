@@ -11,19 +11,23 @@ const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')
 const Icons = Loadable(lazy(() => import('../views/icons/Icons')))
 const TypographyPage = Loadable(lazy(() => import('../views/utilities/TypographyPage')))
 const Shadow = Loadable(lazy(() => import('../views/utilities/Shadow')))
-const Error = Loadable(lazy(() => import('../pages/Error')));
+const Error = Loadable(lazy(() => import('../pages/error/Error')));
 const Register = Loadable(lazy(() => import('../pages/signup/Register')));
 const Login = Loadable(lazy(() => import('../pages/login/Login')));
+const MyChatBot = Loadable(lazy(() => import('../pages/chatbot/Chatbot')));
+const Invitation = Loadable(lazy(() => import('../pages/invitations')));
+const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
 
 const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<FullLayout />} >
         <Route element={<RequireAuth />}>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Navigate to="/teams" />} />
           <Route path="/teams" element={<Org />} />
-          <Route path="/invitations" element={<div></div>} />
+          <Route path="/invitations" element={<Invitation />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/sample-page" element={<SamplePage />} />
           <Route path="/icons" element={<Icons />} />
           <Route path="/ui/typography" element={<TypographyPage />} />
@@ -38,6 +42,8 @@ const Router = () => {
         </Route>
         <Route path="*" element={<Navigate to="/auth/404" />} />
         <Route path="404" element={<Error />} />
+        <Route path="chatbot" element={<MyChatBot />} />
+
       </Route>
     </Routes>)
 }

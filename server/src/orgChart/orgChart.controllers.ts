@@ -17,8 +17,10 @@ export const getOrgChart = async (req: Request, res: Response) => {
                                         id: true, name: true,
                                         supervisor: {
                                             select: {
-                                                id: true, name: true, email: true, role: true, teamId: true, image: true,
-                                                employees: { select: { id: true, name: true, email: true, role: true, image: true } }
+                                                id: true, name: true, email: true, role: true, teamId: true, image: true, position: true,
+                                                employees: {
+                                                    select: { id: true, name: true, email: true, role: true, image: true, position: true, response: true, supervisor: { select: { name: true } } },
+                                                }
                                             }
                                         }
                                     }
@@ -38,7 +40,7 @@ export const getOrgChart = async (req: Request, res: Response) => {
 };
 
 export const addEmployee = async (req: Request, res: Response) => {
-    const { name, email, password, role, image, supervisor } = req.body;
+    const { name, email, password, position, image, supervisor } = req.body;
     try {
 
         const Supervisor = await prisma.supervisor.findFirst({
@@ -60,7 +62,7 @@ export const addEmployee = async (req: Request, res: Response) => {
                 name,
                 email,
                 password: hashedPassword,
-                role,
+                position,
                 image,
                 supervisorId: Number(Supervisor?.id)
             },

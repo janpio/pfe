@@ -1,43 +1,50 @@
 import {
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    TextField, Button
+    Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button
 } from "@mui/material";
-import { FC, useState } from "react";
+import { LoadingButton } from '@mui/lab';
+import { FC } from "react";
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from 'react-query';
 import { addEmployee } from '../../../features/api/api';
-import useAuthStore from "../../../store";
+import { useStore } from "../../../state/store";
+
+type AddEmployeeProps = {
+    showForm: boolean,
+    setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+    setSupervisor: React.Dispatch<React.SetStateAction<string>>
+    Supervisor: string,
+    chart: any,
+    parentNodeId: string
+}
 
 const employeeSchema = object({
     name: string().nonempty('Name is required'),
     email: string().nonempty('Email is required').email('Email is invalid'),
     password: string().nonempty('Password is required').min(8, 'Password must be at least 8 characters'),
-    role: string().nonempty('Role is required'),
+    position: string().nonempty('Position is required'),
     image: string().nonempty('Image is required'),
     supervisor: string()
 });
 
 export type EmployeeInput = TypeOf<typeof employeeSchema>;
 
-const AddEmployee: FC<any> = ({ showForm, setShowForm, Supervisor, chart, parentNodeId }) => {
+const AddEmployee: FC<AddEmployeeProps> = ({ showForm, setShowForm, Supervisor, setSupervisor, chart, parentNodeId }) => {
 
-    const store = useAuthStore()
-    console.log(parentNodeId)
+    const token = useStore((state: any) => state.token)
+
     const addNode = () => {
         const node = {
             id: (Math.floor(Math.random() * 100) + 1).toString(),
             name: getValues().name,
             email: getValues().email,
-            role: getValues().role,
+            position: getValues().position,
             imageUrl: getValues().image,
             parentId: parentNodeId
         };
-
         chart.addNode(node);
     }
-
     const {
         register,
         formState: { errors },
@@ -53,9 +60,9 @@ const AddEmployee: FC<any> = ({ showForm, setShowForm, Supervisor, chart, parent
         addNode()
     };
 
-    const { mutate: addEmployeee, isSuccess } =
+    const { mutate: addEmployeee } =
         useMutation((employeeData: EmployeeInput) =>
-            addEmployee(employeeData, store.token), {
+            addEmployee(employeeData, token), {
             onError: (err) => {
                 console.log(err)
             }
@@ -99,13 +106,13 @@ const AddEmployee: FC<any> = ({ showForm, setShowForm, Supervisor, chart, parent
                             {...register('password')}
                         />
                         <TextField
-                            label='Role'
+                            label='Position'
                             fullWidth
                             margin="normal"
                             type='text'
-                            error={!!errors.role}
-                            helperText={errors.role?.message}
-                            {...register('role')}
+                            error={!!errors.position}
+                            helperText={errors.position?.message}
+                            {...register('position')}
                         />
                         <TextField
                             label='Image'
@@ -118,15 +125,28 @@ const AddEmployee: FC<any> = ({ showForm, setShowForm, Supervisor, chart, parent
                         />
                         <TextField
                             label='Supervisor'
+                            value={Supervisor}
                             fullWidth
                             margin="normal"
                             type='text'
                             {...register('supervisor')}
                         />
                         <DialogActions>
-                            <Button onClick={() => { setShowForm(false) }}>Cancel</Button>
-                            <Button type="submit" variant="contained" color="primary">
-                                Add Employee</Button>
+                            <Button onClick={() => {
+                                setShowForm(false)
+
+                            }}>Cancel</Button>
+                            <LoadingButton
+                                variant="contained"
+                                size="large"
+                                type="submit"
+                                sx={{
+                                    color: 'white', "&:hover": {
+                                        backgroundColor: "#49be25",
+                                    },
+                                }}>
+                                Add Employee
+                            </LoadingButton>
                         </DialogActions>
                     </form>
                 </DialogContent>

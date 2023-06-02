@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from 'react-query';
 import { signUpUserFn } from '../../../features/api/api';
-import useAuthStore from '../../../store';
+import { useStore } from '../../../state/store';
 
 const registerSchema = object({
     name: string().nonempty('Name is required'),
@@ -19,7 +19,12 @@ const registerSchema = object({
 export type RegisterInput = TypeOf<typeof registerSchema>;
 
 const RegisterForm = () => {
-    const store = useAuthStore()
+
+
+    const setRequestLoading = useStore((state: any) => state.setRequestLoading)
+    const requestLoading = useStore((state: any) => state.requestLoading)
+    const login = useStore((state: any) => state.login)
+
     const navigate = useNavigate()
 
     const {
@@ -39,16 +44,16 @@ const RegisterForm = () => {
     const { mutate: registerUser, isSuccess } =
         useMutation((userData: RegisterInput) => signUpUserFn(userData), {
             onMutate() {
-                store.setRequestLoading(true);
+                setRequestLoading(true);
             },
             onSuccess({ token, user }) {
-                store.login(user, token)
-                store.setRequestLoading(false);
+                login(user, token)
+                setRequestLoading(false);
             },
 
             onError(error: any) {
                 setError('email', { type: 'custom', message: error.response.data.message });
-                store.setRequestLoading(false);
+                setRequestLoading(false);
             }
         });
 
@@ -103,7 +108,7 @@ const RegisterForm = () => {
                         variant="contained"
                         size="large"
                         fullWidth
-                        loading={store.requestLoading}
+                        loading={requestLoading}
                         type="submit"
                         sx={{
                             color: 'white', "&:hover": {

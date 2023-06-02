@@ -2,6 +2,7 @@ export type Node = {
     id: string | number,
     parentId: string | number,
     name: string,
+    position?: string,
     role?: string,
     phone?: string,
     email?: string,

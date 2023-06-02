@@ -236,3 +236,14 @@ border-radius: 50px;
   text-align: center;
   color: "white";
 }
+
+
+.inviteButton{
+  position: 'absolute';
+  top: '40px';
+  right: '40px';
+  padding: '20px 30px';
+  border-radius: '25px';
+  font-size: '40px';
+  cursor: 'pointer';
+}

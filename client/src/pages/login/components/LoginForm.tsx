@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify'
 import { loginUserFn } from '../../../features/api/api';
-import useAuthStore from '../../../store';
+import { useStore } from '../../../state/store';
 
 
 const loginSchema = object({
@@ -22,8 +22,10 @@ export type LoginInput = TypeOf<typeof loginSchema>;
 
 const LoginForm = () => {
 
-    const store = useAuthStore();
-    //  const navigate = useNavigate()
+    const setRequestLoading = useStore((state: any) => state.setRequestLoading)
+    const requestLoading = useStore((state: any) => state.requestLoading)
+    const login = useStore((state: any) => state.login)
+
 
     const {
         register,
@@ -42,11 +44,11 @@ const LoginForm = () => {
     const { mutate: loginUser, isSuccess } =
         useMutation((userData: LoginInput) => loginUserFn(userData), {
             onMutate() {
-                store.setRequestLoading(true);
+                setRequestLoading(true);
             },
             onSuccess({ token, user }) {
-                store.setRequestLoading(false);
-                store.login(user, token)
+                setRequestLoading(false);
+                login(user, token)
                 toast.success("Successfully logged in", { position: "top-center" })
                 //     navigate('/dashboard')
                 /*      const timeout = setTimeout(() => {
@@ -55,7 +57,7 @@ const LoginForm = () => {
                 clearTimeout(timeout);*/
             },
             onError(error: any) {
-                store.setRequestLoading(false);
+                setRequestLoading(false);
                 setError('email', { type: 'custom', message: error.response.data?.message },);
                 setError('password', { type: 'custom', message: error.response.data?.message });
             }
@@ -108,7 +110,7 @@ const LoginForm = () => {
                         variant="contained"
                         size="large"
                         fullWidth
-                        loading={store.requestLoading}
+                        loading={requestLoading}
                         type="submit"
                         sx={{
                             color: 'white', "&:hover": {

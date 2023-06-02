@@ -6,7 +6,7 @@ import RecentTransactions from './components/RecentTransactions';
 import ProductPerformance from './components/ProductPerformance';
 import Blog from './components/Blog';
 import MonthlyEarnings from './components/MonthlyEarnings';
-import useAuthStore from '../../store';
+import useAuthStore from '../../state/store';
 
 const Dashboard = () => {
 

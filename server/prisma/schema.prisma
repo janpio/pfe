@@ -1,49 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Employee {
-  id           Int         @id @default(autoincrement())
-  name         String
-  email        String      @unique @default("")
-  password     String      @default("")
-  role         String?
-  supervisor   Supervisor? @relation(fields: [supervisorId], references: [id])
-  image        String?     @default("")
-  supervisorId Int?
-  desk         Desk?       @relation(fields: [deskId], references: [id])
-  deskId       Int?        @unique
-  response     Response[]
+  id                         Int                  @id @default(autoincrement())
+  name                       String
+  supervisorId               Int?
+  deskId                     Int?                 @unique
+  image                      String?
+  email                      String?              @unique
+  password                   String?              @default("")
+  createdAt                  DateTime             @default(now())
+  position                   String?
+  updatedAt                  DateTime             @default(now()) @updatedAt
+  role                       Role                 @default(USER)
+  phone                      Int                  @default(12345678)
+  ActivityInvitationReceived ActivityInvitation[] @relation("InvitationsReceived")
+  ActivityInvitationSent     ActivityInvitation[] @relation("InvitationsSent")
+  desk                       Desk?                @relation(fields: [deskId], references: [id])
+  supervisor                 Supervisor?          @relation(fields: [supervisorId], references: [id])
+  response                   Response[]
 }
 
 model Supervisor {
   id        Int        @id @default(autoincrement())
-  name      String
-  email     String     @unique @default("")
-  password  String     @default("")
-  role      String?    @default("")
-  image     String?    @default("")
+  name      String?
+  teamId    Int?
+  image     String?
+  email     String?    @unique
+  password  String?
+  createdAt DateTime   @default(now())
+  position  String?
+  updatedAt DateTime   @updatedAt
+  role      Role       @default(USER)
   employees Employee[]
   Team      Team?      @relation(fields: [teamId], references: [id])
-  teamId    Int?
 }
 
 model Team {
   id         Int          @id @default(autoincrement())
   name       String
-  supervisor Supervisor[]
-  image      String       @default("")
-  Room       Room         @relation(fields: [roomId], references: [id])
-  roomId     Int
-  product    Product      @relation(fields: [productId], references: [id])
-  productId  Int
-  Stage      Stage?       @relation(fields: [stageId], references: [id])
+  roomId     Int?
   stageId    Int?
+  image      String?
+  product    String?
+  supervisor Supervisor[]
+  Room       Room?        @relation(fields: [roomId], references: [id])
+  Stage      Stage?       @relation(fields: [stageId], references: [id])
 }
 
 model Building {
@@ -55,57 +63,76 @@ model Building {
 model Stage {
   id         Int       @id @default(autoincrement())
   name       String
-  rooms      Room[]
-  teams      Team[]
-  image      String    @default("")
-  Building   Building? @relation(fields: [buildingId], references: [id])
   buildingId Int?
+  image      String    @default("")
+  rooms      Room[]
+  Building   Building? @relation(fields: [buildingId], references: [id])
+  teams      Team[]
 }
 
 model Room {
   id      Int    @id @default(autoincrement())
   name    String
-  Stage   Stage  @relation(fields: [stageId], references: [id])
   stageId Int
   image   String @default("")
-  teams   Team[]
   desks   Desk[]
+  Stage   Stage  @relation(fields: [stageId], references: [id])
+  teams   Team[]
 }
 
 model Desk {
   id       Int       @id @default(autoincrement())
-  name     String    @unique
-  employee Employee?
-  Room     Room      @relation(fields: [roomId], references: [id])
+  name     String
   roomId   Int
-}
-
-model Activity {
-  id        Int      @id @default(autoincrement())
-  name      String
-  day       String
-  beginTime DateTime
-  endTime   DateTime
-}
-
-model Product {
-  id   Int    @id @default(autoincrement())
-  name String
-  Team Team[]
+  Room     Room      @relation(fields: [roomId], references: [id])
+  employee Employee?
 }
 
 model Question {
-  id       Int        @id @default(autoincrement())
-  question String
-  category String
-  response Response[]
+  id          Int        @id @default(autoincrement())
+  question    String
+  category    String?
+  abreviation String?
+  response    Response[]
 }
 
 model Response {
-  id         Int      @id @default(autoincrement())
-  response   String
-  Question   Question @relation(fields: [questionID], references: [id])
-  questionID Int
-  Employee   Employee @relation(fields: [employeeId], references: [id])
-  employeeId Int
+  id         Int       @id @default(autoincrement())
+  response   String?
+  employeeId Int?
+  questionId Int?
+  Employee   Employee? @relation(fields: [employeeId], references: [id])
+  Question   Question? @relation(fields: [questionId], references: [id])
+}
+
+model Activity {
+  id          Int                  @id @default(autoincrement())
+  type        String
+  invitations ActivityInvitation[]
+}
+
+model ActivityInvitation {
+  id          Int               @id @default(autoincrement())
+  activityId  Int?
+  senderId    Int?
+  recipientId Int?
+  hasRead     Boolean           @default(false)
+  status      InvitationStatus? @default(PENDING)
+  date        DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  activity    Activity?         @relation(fields: [activityId], references: [id])
+  recipient   Employee?         @relation("InvitationsReceived", fields: [recipientId], references: [id])
+  sender      Employee?         @relation("InvitationsSent", fields: [senderId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }

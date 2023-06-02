@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useAuthStore from '../../../store';
+import { useStore } from '../../../state/store';
 import {
   Avatar,
   Box,
@@ -16,20 +16,23 @@ import ProfileImg from '/src/assets/images/profile/user-1.jpg';
 
 const Profile = () => {
 
-  const store = useAuthStore()
+  const user = useStore((state: any) => state.user)
+  const logout = useStore((state: any) => state.logout)
 
-  const { user } = store
+  //  const store = useAuthStore()
+
 
   const handleLogout = () => {
-    store.logout()
+    logout()
   }
 
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -37,16 +40,11 @@ const Profile = () => {
       <Box>
         <IconButton
           size="large"
-          aria-label="show 11 new notifications"
+          aria-label="show profile & logout"
           color="inherit"
           aria-controls="msgs-menu"
           aria-haspopup="true"
-          sx={{
-            ...(typeof anchorEl2 === 'object' && {
-              color: 'primary.main',
-            }),
-          }}
-          onClick={handleClick2}
+          onClick={handleClick}
         >
           <Avatar
             src={user?.image || ProfileImg}
@@ -62,10 +60,10 @@ const Profile = () => {
         {/* ------------------------------------------- */}
         <Menu
           id="msgs-menu"
-          anchorEl={anchorEl2}
+          anchorEl={anchorEl}
           keepMounted
-          open={Boolean(anchorEl2)}
-          onClose={handleClose2}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           sx={{
@@ -74,13 +72,16 @@ const Profile = () => {
             },
           }}
         >
-          <MenuItem>
+
+          <MenuItem divider component={Link} to={'/profile'}>
             <ListItemIcon>
               <IconUser width={20} />
             </ListItemIcon>
-            <ListItemText>My Profile</ListItemText>
+            <ListItemText>
+              My Profile
+            </ListItemText>
           </MenuItem>
-          <MenuItem>
+          {/*         <MenuItem>
             <ListItemIcon>
               <IconMail width={20} />
             </ListItemIcon>
@@ -91,7 +92,7 @@ const Profile = () => {
               <IconListCheck width={20} />
             </ListItemIcon>
             <ListItemText>My Tasks</ListItemText>
-          </MenuItem>
+        </MenuItem>*/}
           <Box mt={1} py={1} px={2}>
             <Button variant="outlined" color="primary" onClick={handleLogout} fullWidth>
               Logout

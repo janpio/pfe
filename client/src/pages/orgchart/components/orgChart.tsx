@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState, FC, useEffect } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { OrgChart } from "d3-org-chart";
 import CustomExpandButton from "./customExpandButton";
@@ -6,44 +6,55 @@ import Card from "./Card";
 import { Node } from "../types";
 import * as d3 from "d3";
 import { Button, Theme, useTheme } from "@mui/material";
-import useAuthStore from "../../../store";
-import { getNodeID, getNodeInfo } from "../utils";
-import AddEmployee from "./AddEmployeeForm";
-const chart = new OrgChart();
+import { getNodeByEmail, getNodeById, getTeammatesNodes } from "../utils";
+import { useStore } from "../../../state/store";
+import InvitationForm from "./InvitationForm";
+
 
 type OrganizationalChartProps = {
   data: Node[] | undefined;
 }
+const chart = new OrgChart();
 
-const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
+const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
+
+  const theme = useTheme<Theme>();
+
+  const user = useStore((state: any) => state.user)
+  const setTeammate = useStore((state: any) => state.setTeammate)
 
   const [showForm, setShowForm] = useState(false);
-  const [parentNodeId, setParentNodeId] = useState("");
-  const [supervisor, setSupervisor] = useState("");
+  //const [parentNodeId, setParentNodeId] = useState<string | number>("");
+  // const [supervisor, setSupervisor] = useState("");
 
+  /*  const handleNodeClick = (node: Node) => {
+      setParentNodeId(node.id);
+      setSupervisor(node.name)
+      setShowForm(true);
+    };*/
 
-  const handleNodeClick = (node: any) => {
-    setParentNodeId(node.id);
-    setSupervisor(node.name)
+  const handleInvite = (node: Node) => {
+    setTeammate(node);
     setShowForm(true);
   };
 
-  const store = useAuthStore()
+  const handleFullScreen = () => {
+    chart.fullscreen();
+    chart.setCentered(myNode.id);
+    chart.render()
+  };
 
-  const email = store.user?.email
+  const email = user?.email
+  const myNode = getNodeByEmail(data, email)
 
-  const NodeId = getNodeID(data, email)
+  useEffect(() => {
+    let teammates = getTeammatesNodes(data, myNode.parentId)
+    teammates = teammates.filter((teammate: any) => teammate.name !== user.name)
+    localStorage.setItem('teammates', JSON.stringify(teammates))
+  }, [])
 
   const d3Container = useRef<any>(null);
 
-
-  const handleFullScreen = () => {
-
-    //   chart.addNode()
-    // chart.fullscreen();
-    // chart.setCentered(13);
-    // chart.render()
-  };
 
   useLayoutEffect(() => {
     let compact = 0;
@@ -51,8 +62,8 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
       chart
         .container(d3Container.current)
         .data(data)
-        .nodeWidth((d: any) => d.data.role ? 830 : 630)
-        .nodeHeight((d: any) => d.data.role ? 620 : 420)
+        .nodeWidth((d: any) => d.data.position ? 830 : 630)
+        .nodeHeight((d: any) => d.data.position ? 620 : 420)
         .childrenMargin((d: any) => 100)
         .siblingsMargin((d: any) => 80)
         .nodeUpdate(function (this: HTMLElement, d, i, arr) {
@@ -62,7 +73,12 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
                 ? 'black'
                 : 'none'
             ).attr("stroke-width", 15)
-
+          const currentNode = d3.select(this)
+          const inviteButton = currentNode.select('#inviteBtn');
+          inviteButton.on('click', () => {
+            handleInvite(d.data as Node)
+            //   console.log(d.data)
+          })
         })
         .linkUpdate(function (this: HTMLElement, d, i, arr) {
           d3.select(this)
@@ -71,9 +87,10 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
         })
         .compact(!!(compact++ % 2)).render().fit()
         .onNodeClick((d) => {
-          const node = getNodeInfo(data, d)
-          handleNodeClick(node)
-
+          //const node = getNodeById(data, d)
+          //console.log(node)
+          /* if (node?.email)
+             handleNodeClick(node)*/
         })
         .buttonContent((node) => {
           return renderToStaticMarkup(
@@ -85,18 +102,17 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
             <Card {...d} />
           );
         }).svgHeight(800).render()
-        //.setCentered(9).initialZoom(0.3).render();
-        .setCentered(NodeId).setHighlighted(NodeId).initialZoom(0.33).render();
+        .setCentered(myNode.id).setHighlighted(myNode.id).initialZoom(0.33).render();
+      //.setCentered(9).initialZoom(0.3).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
-
     }
   }, [data]);
 
-  const theme = useTheme<Theme>();
   return (
     <>
       <div className="org-chart" ref={d3Container}>
         <Button variant='contained'
+          onClick={handleFullScreen}
           sx={{
             marginX: '20px',
             marginY: '20px',
@@ -110,13 +126,17 @@ const OrganizationalChart = ({ data }: OrganizationalChartProps) => {
             },
           }}>Fullscreen</Button>
       </div>
-      <AddEmployee
+      {<InvitationForm
+        showForm={showForm}
+        setShowForm={setShowForm} />
+      }      {/* <AddEmployee
         parentNodeId={parentNodeId}
         showForm={showForm}
         setShowForm={setShowForm}
         chart={chart}
-      //   Supervisor={supervisor}
-      />
+        Supervisor={supervisor}
+        setSupervisor={setSupervisor}
+        />*/}
     </>
 
   );

@@ -22,6 +22,7 @@ export const Register = async (req: Request, res: Response) => {
                 name: name,
                 email: email,
                 password: hashedPassword,
+                role: "USER" as const
             },
         });
         const token = jwt.sign(newUser, 'splash_secret', { expiresIn: '7d' });
@@ -49,6 +50,7 @@ export const Login = async (req: Request, res: Response) => {
             where: {
                 email
             },
+            include: { response: true, ActivityInvitationReceived: { include: { sender: true } }, ActivityInvitationSent: true }
         })
         let user: Employee | Supervisor | null = null;
 
@@ -58,7 +60,7 @@ export const Login = async (req: Request, res: Response) => {
             user = employee;
         }
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user || !(await bcrypt.compare(password, user.password as string))) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
         const token = jwt.sign(user, 'splash_secret', { expiresIn: '2d' });

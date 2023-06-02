@@ -1,7 +1,8 @@
 import { FC } from "react";
+import { Button } from "@mui/material";
 import "../styles.css";
 
-const Card: FC<any> = ({ data: { name, imageUrl, role, team, _directSubordinates } }) => {
+const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordinates } }) => {
   return (
     <div>
       {name === "immeuble" ?
@@ -24,9 +25,23 @@ const Card: FC<any> = ({ data: { name, imageUrl, role, team, _directSubordinates
                   {name}
                 </h1>
               </div>)
-
               : <div className="container">
-                <div >
+                <div>
+                  <button
+                    id="inviteBtn" style={{
+                      position: 'absolute',
+                      top: '40px',
+                      right: '40px',
+                      backgroundColor: '#4ace3c',
+                      border: '1px solid #4ace3c',
+                      color: 'white',
+                      padding: '20px 30px',
+                      borderRadius: '25px',
+                      fontSize: '40px',
+                      cursor: 'pointer',
+                    }}>
+                    Invite
+                  </button>
                   <img src={imageUrl} className="avatar" alt="avatar" />:
                   {_directSubordinates ? <div className="badge">{_directSubordinates}</div> : null}
                 </div>
@@ -35,7 +50,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, role, team, _directSubordinates
                     {name || team}
                   </h1>
                   <h1 className="job">
-                    {role}
+                    {position}
                   </h1>
                 </div>
               </div>

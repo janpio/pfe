@@ -1,45 +1,44 @@
-
-import { create } from 'zustand';
+import { StateCreator } from 'zustand';
 
 export type User = {
     id: number,
     name: string,
-    email?: string,
-    role?: string,
+    email: string,
+    position?: string,
     image?: string
+    parentId?: string | number,
+    responses: any[]
     supervisorId?: number
     deskId?: number
 }
-
 export type Supervisor = {
     id: number,
     name: string,
     email?: string,
-    role?: string,
+    position?: string,
     image?: string
     employees?: User[]
     teamId?: number
 }
-type Store = {
+/*type authSlice = {
+    teammates: Array<User> | null | any
     user: User | Supervisor | null;
     token: string | null
-    showForm: boolean
     requestLoading: boolean
+
+    setTeammates: (teammates: Array<User> | null) => void,
     setRequestLoading: (isLoading: boolean) => void;
     login: (user: User | Supervisor, token: string) => void;
     logout: () => void
-};
+};*/
 
-const useAuthStore = create<Store>((set) => ({
+export const authSlice: StateCreator<[]> = ((set): any => ({
     user: null,
     token: null,
-    showForm: false,
     requestLoading: false,
 
-    setShowForm: (showForm: boolean) =>
-        set((state) => ({ ...state, showForm: showForm })),
 
-    setRequestLoading: (isLoading) =>
+    setRequestLoading: (isLoading: boolean) =>
         set((state) => ({ ...state, requestLoading: isLoading })),
 
     login: (user: User | Supervisor, token: string) => {
@@ -52,5 +51,3 @@ const useAuthStore = create<Store>((set) => ({
         set((state) => ({ ...state, user: null, token: null }));
     },
 }));
-
-export default useAuthStore;
