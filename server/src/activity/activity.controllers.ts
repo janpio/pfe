@@ -12,6 +12,41 @@ export const getActivties = async (req: Request, res: Response) => {
     }
 };
 
+export const addActivity = async (req: Request, res: Response) => {
+    const { type, image } = req.body;
+
+    try {
+        const activity = await prisma.activity.create({
+            data: {
+                type,
+                image
+            }
+        })
+        res.status(201).json(activity);
+
+    } catch (err: any) {
+
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+};
+
+export const deleteActivity = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const activity = await prisma.activity.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+        res.status(200).json(activity);
+
+    } catch (err: any) {
+
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+};
+
 export const sendInvitation = async (req: Request, res: Response) => {
     const { sender, recipient, activity, date } = req.body;
 
@@ -43,7 +78,22 @@ export const sendInvitation = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+export const getAllInvitations = async (req: Request, res: Response) => {
+    try {
 
+        const allInvitations = await prisma.activityInvitation.findMany({
+            orderBy: { createdAt: 'desc' },
+            include:
+                { sender: true, recipient: true, activity: true }
+        })
+
+        res.status(200).json(allInvitations);
+
+    } catch (err: any) {
+
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+};
 export const getInvitationsReceived = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
     try {
@@ -69,6 +119,7 @@ export const getInvitationsReceived = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const getInvitationsSent = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
     try {
@@ -78,8 +129,9 @@ export const getInvitationsSent = async (req: Request, res: Response) => {
             },
             select: {
                 ActivityInvitationSent: {
+                    orderBy: { createdAt: 'desc' },
                     select: {
-                        id: true, activity: true, recipient: { select: { name: true } }, status: true, date: true
+                        id: true, activity: true, recipient: { select: { name: true, image: true } }, status: true, date: true
                     }
                 }
             }

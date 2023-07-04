@@ -30,9 +30,9 @@ function App() {
                                     onChange={handleChange}>
                                     <Tab
                                         icon={<CallReceivedIcon />}
-                                        label="Invitations Received" value="1" />
+                                        label="Invitations reçues" value="1" />
                                     <Tab icon={<SendIcon />}
-                                        label="Invitations Sent" value="2" />
+                                        label="Invitations Envoyées" value="2" />
                                 </TabList>
                             </Box>
 

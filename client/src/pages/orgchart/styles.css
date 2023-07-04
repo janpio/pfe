@@ -164,8 +164,8 @@ border-radius: 50px;
   }
 .equipeContainer{
   width: 620px;
-  height: 400px;
-  border-radius: 50px;
+  height: 300px;
+  border-radius: 50%;
   background-color: black;
     } 
 .equipeContainer>.name{

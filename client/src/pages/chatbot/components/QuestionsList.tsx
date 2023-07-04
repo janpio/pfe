@@ -31,12 +31,12 @@ export default function QuestionsList({ triggerNextStep }: any) {
     useEffect(() => {
         setResponse(getQuestionResponse(teammate, question, questions) ?
             getQuestionResponse(teammate, question, questions) :
-            `Oops ${teammate} doesn't provide a response to this question !`)
+            `Désolé ${teammate} n'a pas répondu à cette question`)
     }, [question])
 
     return (
         <div>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ m: -1.5, minWidth: 120 }}>
                 <InputLabel id="question-select">Questions</InputLabel>
                 <Select
                     labelId="question-select"
@@ -60,7 +60,7 @@ export default function QuestionsList({ triggerNextStep }: any) {
                         },
                     }}
                 >
-                    Ask
+                    Affiche réponse
                 </Button>
             </FormControl>
         </div>

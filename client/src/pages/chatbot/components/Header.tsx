@@ -17,7 +17,7 @@ const Header: FC<any> = ({ setOpen, open }) => {
                         </span>
                     </div>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-                        FIS Meeting ChatBot
+                        FIS ChatBot de communication
                     </Typography>
                     <Button onClick={() => setOpen(false)}
                         sx={{ color: 'white', marginRight: '-20px' }}>

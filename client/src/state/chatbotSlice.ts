@@ -31,8 +31,15 @@ export type Supervisor = {
     login: (user: User | Supervisor, token: string) => void;
     logout: () => void
 };*/
+export type chatbotSliceType = {
+    teammate: User | null
+    teammates: Array<User> | null
+    setTeammate: (teammate: User | null) => void,
+    setTeammates: (teammates: Array<User> | null) => void,
 
-export const chatbotSlice: StateCreator<[]> = ((set): any => ({
+}
+
+export const chatbotSlice: StateCreator<chatbotSliceType, [], [], chatbotSliceType> = ((set): any => ({
     teammate: null,
     teammates: null,
 

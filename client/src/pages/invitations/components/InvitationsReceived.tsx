@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Card, CardContent, Typography, Chip,
-    Button, Box, Avatar, Theme, useTheme
+    Button, Box, Avatar, Theme, useTheme, IconButton
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -9,24 +9,19 @@ import { changeInvitationStatus } from '../../../features/api/api';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getInvitationsReceived } from '../../../features/api/api';
 import { useStore } from '../../../state/store';
-
-interface InvitationProps {
-    sender: string;
-    activity: string;
-    onAccept: () => void;
-    onDecline: () => void;
-}
+import { formatDate } from '../../admin/utils';
+import { IconTrashXFilled } from '@tabler/icons-react';
 
 interface FeedbackEntry {
     id: string;
     feedback: string;
 }
 
-const Invitation: React.FC<any> = ({ sender, activity, onAccept, onDecline }) => {
+const Invitation: React.FC<any> = () => {
 
-    const token = useStore((state: any) => state.token)
-    const user = useStore((state: any) => state.user)
-    const { id } = useStore((state: any) => state.user)
+    const token = useStore((state: any) => state?.token)
+    const user = useStore((state: any) => state?.user)
+    const { id } = useStore((state: any) => state?.user)
 
     const queryClient = useQueryClient()
 
@@ -86,35 +81,55 @@ const Invitation: React.FC<any> = ({ sender, activity, onAccept, onDecline }) =>
         <>
             {invisReceived?.map((inv: any) =>
                 <Card key={inv.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
-                    <CardContent  >
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box display={"flex"} gap={10} alignItems={'center'}>
                             <Avatar
                                 src={inv.sender.image}
                                 alt={"user-avatar"}
                                 sx={{
                                     border: '4px solid #4ace3c',
-                                    width: 40,
-                                    height: 40,
+                                    width: 50,
+                                    height: 50,
                                     mr: -8,
                                 }}
                             />
-                            <Typography variant="h6" component="div" >
-                                Invitation from {inv.sender.name}
+                            <Typography display={'flex'} gap={1} variant="h6" component="div">
+                                Invitation reçue de
+                                <Box color='red'>
+                                    {inv.sender.name}
+                                </Box>
                             </Typography>
                             <Box display={'flex'} alignItems={'center'} gap={1} >
                                 <Typography variant="h6" component="div">
-                                    Status :
+                                    État :
                                 </Typography>
                                 <Typography variant="h6" component="div">
-                                    <Chip label={inv.status} color={inv.status === 'PENDING' ? 'warning'
-                                        : inv.status === "ACCEPTED" ? 'primary'
-                                            : 'error'} sx={{ color: 'white' }} />
+                                    <Chip
+                                        label={inv.status === 'PENDING' ? 'En Attente'
+                                            : inv.status === "ACCEPTED" ? 'Accepté'
+                                                : 'Refusé'}
+                                        color={inv.status === 'PENDING' ? 'warning'
+                                            : inv.status === "ACCEPTED" ? 'primary'
+                                                : 'error'} sx={{ color: 'white' }} />
                                 </Typography>
+                                <IconButton color='error' sx={{ position: 'absolute', right: 80 }}><IconTrashXFilled /></IconButton>
+
                             </Box>
                         </Box>
-                        <Typography variant="body1" marginTop={2}>
-                            Activity: {inv.activity.type}
-                        </Typography>
+                        <Box display={'flex'} alignItems={'center'} marginTop={1}>
+                            <img src={inv.activity.image} height={80} style={{ borderRadius: '50%' }} />
+                            <Typography variant="h6" marginTop={1} marginLeft={1} display={'flex'}>
+                                <Box color='#539BFF'>Activité</Box> : {inv.activity.type}
+                            </Typography>
+                            <Typography
+                                variant='h6'
+                                display={'flex'}
+                                marginLeft={10}
+                                marginTop={1}>
+                                <Box color='#539BFF'> Date : </Box>
+                                {formatDate(inv.date)}
+                            </Typography>
+                        </Box>
                         {inv.status === "PENDING" &&
                             <Box sx={{ display: 'flex', mt: 2 }}>
                                 <Button
@@ -132,14 +147,14 @@ const Invitation: React.FC<any> = ({ sender, activity, onAccept, onDecline }) =>
                                             color: theme.palette.primary.main,
                                         },
                                     }}>
-                                    Accept
+                                    Accepter
                                 </Button>
                                 <Button
                                     startIcon={<ClearIcon />}
                                     variant="contained"
                                     onClick={() => handleDecline(inv.id)}
                                     color='error'>
-                                    Decline
+                                    Refuser
                                 </Button>
                             </Box>}
                         {/*  <Typography variant="h6" component="div" sx={{ mt: 2 }}>

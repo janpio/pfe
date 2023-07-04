@@ -38,13 +38,25 @@ export const addEmployee = async (employee: EmployeeInput, token: string | null)
 }
 
 // chatbot
-export const getQuestions = async (token: string | null) => {
+export const getQuestions = async (token: string) => {
     const response = await api.get<Question[]>('chatbot', { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }
-export const saveResponse = async (employeeData: Response, token: string | null) => {
-    const res = await api.post<Response>('chatbot', employeeData,
+export const addQuestion = async (question: string, token: string) => {
+    const response = await api.post<Question>('chatbot', { question },
+        { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+export const deleteQuestion = async (id: number, token: string) => {
+    const response = await api.delete<Question>(`chatbot/${id}`,
+        { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+export const saveResponse = async (employeeData: Response, token: string) => {
+    const res = await api.post<Response>('chatbot/response', employeeData,
         { headers: { "Authorization": `Bearer ${token}` } })
     const data = await res.data
     return data
@@ -57,8 +69,30 @@ export const getActivities = async (token: string) => {
     const data = await response.data
     return data
 }
+export const addActivity = async (activity: Activity, token: string) => {
+    const response = await api.post<Activity>('activity', activity, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+
+export const deleteActivity = async (id: number, token: string) => {
+    const response = await api.delete<Activity>(`activity/${id}`, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+
 export const sendInvitation = async (invitation: Invitation, token: string) => {
     const response = await api.post<Invitation>('activity/sendInvitation', invitation, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+export const getAllInvitations = async (token: string) => {
+    const response = await api.get<Invitation[]>('activity/getAllInvitations'
+        , {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
     const data = await response.data
     return data
 }

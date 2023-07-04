@@ -5,10 +5,13 @@ export type User = {
     name: string,
     email: string,
     position?: string,
-    image?: string
+    team?: string,
+    image?: string,
+    supervisorId?: number,
+    supervisor?: Supervisor;
+    responses: any[],
+    role?: string,
     parentId?: string | number,
-    responses: any[]
-    supervisorId?: number
     deskId?: number
 }
 export type Supervisor = {
@@ -20,19 +23,17 @@ export type Supervisor = {
     employees?: User[]
     teamId?: number
 }
-/*type authSlice = {
-    teammates: Array<User> | null | any
-    user: User | Supervisor | null;
-    token: string | null
-    requestLoading: boolean
-
+export type authSliceType = {
+    user?: User | Supervisor | null;
+    token?: string | null
+    requestLoading?: boolean
     setTeammates: (teammates: Array<User> | null) => void,
     setRequestLoading: (isLoading: boolean) => void;
     login: (user: User | Supervisor, token: string) => void;
     logout: () => void
-};*/
+};
 
-export const authSlice: StateCreator<[]> = ((set): any => ({
+export const authSlice: StateCreator<authSliceType, [], [], authSliceType> = ((set): any => ({
     user: null,
     token: null,
     requestLoading: false,
@@ -48,6 +49,7 @@ export const authSlice: StateCreator<[]> = ((set): any => ({
 
     logout: () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("teammates");
         set((state) => ({ ...state, user: null, token: null }));
     },
 }));

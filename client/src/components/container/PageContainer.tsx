@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Chatbot from '../../pages/chatbot/Chatbot';
-import { Box } from '@mui/system';
 
 interface PageContainerProps {
   title: string;
@@ -16,7 +15,9 @@ const PageContainer: FC<PageContainerProps> = ({ title, description, children })
       <meta name="description" content={description} />
     </Helmet>
     {children}
-    {((title === "orgchart") || (title === "invitations")) && <Chatbot />}
+    {((title === "orgchart") ||
+      (title === "invitations") ||
+      (title === "admin") || (title === "profile")) && <Chatbot />}
   </HelmetProvider>
 );
 

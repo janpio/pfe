@@ -48,13 +48,12 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
   const myNode = getNodeByEmail(data, email)
 
   useEffect(() => {
-    let teammates = getTeammatesNodes(data, myNode.parentId)
+    let teammates = getTeammatesNodes(data, myNode?.parentId)
     teammates = teammates.filter((teammate: any) => teammate.name !== user.name)
     localStorage.setItem('teammates', JSON.stringify(teammates))
   }, [])
 
   const d3Container = useRef<any>(null);
-
 
   useLayoutEffect(() => {
     let compact = 0;
@@ -62,10 +61,12 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
       chart
         .container(d3Container.current)
         .data(data)
-        .nodeWidth((d: any) => d.data.position ? 830 : 630)
-        .nodeHeight((d: any) => d.data.position ? 620 : 420)
+        .nodeWidth((d: any) => d.data.position ? 830 : 620)//630
+        .nodeHeight((d: any) => d.data.position ? 620 : d.data.name.toLowerCase().includes('equipe') ? 300 : 420)
         .childrenMargin((d: any) => 100)
         .siblingsMargin((d: any) => 80)
+        .neightbourMargin((d: any) => 20)
+
         .nodeUpdate(function (this: HTMLElement, d, i, arr) {
           d3.select(this)
             .attr('stroke', (d: any) =>
@@ -102,7 +103,7 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
             <Card {...d} />
           );
         }).svgHeight(800).render()
-        .setCentered(myNode.id).setHighlighted(myNode.id).initialZoom(0.33).render();
+        .setCentered(myNode?.id).setHighlighted(myNode?.id).initialZoom(0.33).render();
       //.setCentered(9).initialZoom(0.3).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
     }
@@ -111,20 +112,7 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
   return (
     <>
       <div className="org-chart" ref={d3Container}>
-        <Button variant='contained'
-          onClick={handleFullScreen}
-          sx={{
-            marginX: '20px',
-            marginY: '20px',
-            position: 'absolute',
-            padding: '8px 10px',
-            borderRadius: '8px',
-            color: 'white',
-            '&:hover': {
-              backgroundColor: theme.palette.primary.light,
-              color: theme.palette.primary.main,
-            },
-          }}>Fullscreen</Button>
+
       </div>
       {<InvitationForm
         showForm={showForm}

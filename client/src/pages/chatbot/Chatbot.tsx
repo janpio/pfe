@@ -134,9 +134,6 @@ const Chatbot = () => {
         },
     ]
 
-    const [userResponses, setUserResponses] = useState({});
-
-
     const buildSteps = (questions: any) => {
         let steps = [] as any[];
 
@@ -145,26 +142,26 @@ const Chatbot = () => {
             const responseId = `BOT/Response${index + 1}`;
             steps.push({
                 id: "BOT/intro",
-                message: "Hello there! What do you want to do ?",
+                message: "Salut! Qu'est-ce que vous voulez faire ?",
                 trigger: "CHOICES/intro",
             },
                 {
                     id: "CHOICES/intro",
                     options: [
-                        { label: "Ask questions about teammates!", trigger: "BOT/chooseTeammate" },
-                        { label: "Answer  some questions", trigger: "BOT/Question1" },
+                        { label: "Répondre aux questions", trigger: "BOT/Question1" },
+                        { label: "Savoir des informations sur d'autres employés", trigger: "BOT/chooseTeammate" },
                     ],
-                    placeholder: 'Choose an option'
+                    placeholder: 'Choisissez une option'
 
                 },
                 {
                     id: "BOT/chooseTeammate",
-                    message: "Choose One of the following teammates...",
+                    message: "Choisissez un employé de la liste",
                     trigger: "CHOICES/choose",
                 },
                 {
                     id: "CHOICES/choose",
-                    placeholder: "Choose one from the list",
+                    placeholder: "Choisissez un employé de la liste",
                     component:
                         <NamesList />,
                     waitAction: true,
@@ -173,13 +170,13 @@ const Chatbot = () => {
                     id: 'BOT/TeammateQuestion',
                     message: (props: any) => {
                         // console.log(props);
-                        return `What do you want to now about  ${props.previousValue} ?`;
+                        return `Que voulez-vous savoir sur ${props.previousValue} ?`;
                     },
                     trigger: 'BOT/TeammateQuestionList',
                 },
                 {
                     id: 'BOT/TeammateQuestionList',
-                    placeholder: "Choose one from the list",
+                    placeholder: "Choisissez une question de la liste",
                     component:
                         <QuestionsList />,
                     waitAction: true,
@@ -194,14 +191,14 @@ const Chatbot = () => {
                     id: 'BOT/askAnotherOrChangeOrEnd',
                     placeholder: "Choose an option",
                     options: [
-                        { label: 'Ask another question', trigger: 'BOT/TeammateQuestionList' },
-                        { label: 'Ask another Teammate', trigger: 'CHOICES/choose' },
-                        { label: 'End', trigger: 'BOT/end' },
+                        { label: 'Choisir une autre question', trigger: 'BOT/TeammateQuestionList' },
+                        { label: 'Choisir un autre employé', trigger: 'CHOICES/choose' },
+                        { label: 'Finir la conversation', trigger: 'BOT/end' },
                     ],
                 },
                 {
                     id: 'BOT/end',
-                    message: 'Thank you for using the chatbot. Goodbye!',
+                    message: "Merci d'avoir utilisé le chatbot. Au revoir!",
                     end: true,
                 },)
             steps.push(
@@ -214,11 +211,7 @@ const Chatbot = () => {
                     id: responseId,
                     user: true,
                     trigger: ({ value }: any) => {
-                        setUserResponses((prevResponses) => ({
-                            ...prevResponses,
-                            [question.question]: value,
-                        }));
-                        postResponse({ questionId: question.id, response: value, employeeId: 9 });
+                        postResponse({ questionId: question.id, response: value, employeeId: user.id });
                         return (index === questions?.length - 1) ? 'BOT/endAnswer' :
                             `BOT/Question${index + 2}`
                     },
@@ -228,15 +221,15 @@ const Chatbot = () => {
 
         steps.push({
             id: 'BOT/endAnswer',
-            message: 'Thank you for your answers what do you want to do next ?',
+            message: 'Merci pour vos réponses que voulez-vous faire ensuite ?',
             trigger: 'BOT/endAnswerOptions'
         }
             , {
                 id: 'BOT/endAnswerOptions',
-                placeholder: "Choose an option",
+                placeholder: "Choisissez un option",
                 options: [
-                    { label: 'Ask about a teammate', trigger: 'CHOICES/choose' },
-                    { label: 'End', trigger: 'BOT/end' },
+                    { label: "Savoir des informations sur d'autres employés", trigger: 'CHOICES/choose' },
+                    { label: 'Finir la conversation', trigger: 'BOT/end' },
                 ]
             }
 
@@ -282,6 +275,7 @@ const Chatbot = () => {
                 bubbleOptionStyle={{ backgroundColor: "#4ace3c", color: "white", width: 'auto' }}
                 steps={stepifyScript(steps)}
                 width={"400px"}
+                height={"600px"}
                 userAvatar={user?.image}
                 botAvatar={"https://play-lh.googleusercontent.com/sIPvD23PRhSQjuqLFUtZg5g92sO851MRsSon3N3k6fDlCtzgLi1lTPvXOUAXxG5gHg=w240-h480-rw"}
             />

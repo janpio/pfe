@@ -4,12 +4,11 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import { Card } from '@mui/material'
 import { useStore } from '../../state/store'
-
+import PageContainer from '../../components/container/PageContainer'
 
 const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
@@ -22,8 +21,8 @@ const ImgStyled = styled('img')(({ theme }) => ({
 
 const Profile = () => {
 
-    const user = useStore((state: any) => state.user)
-
+    const user = useStore((state: any) => state?.user)
+    console.log(user)
     const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
 
     const onChange = (file: ChangeEvent) => {
@@ -37,64 +36,65 @@ const Profile = () => {
     }
 
     return (
-        <Card variant='outlined' sx={{
-            borderRadius: 7,
-            boxShadow: 10,
-            paddingX: 4, pb: 2,
-        }}>
-            <CardContent >
-                <form>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12} sx={{ marginTop: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <ImgStyled src={user.image} alt='Profile Pic' />
-                                <Box>
-                                    <Button component='label' variant='contained' htmlFor='account-settings-upload-image'
-                                        sx={{
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: '#ECF2FF',
-                                                color: '#4ace3c',
-                                            },
-                                        }}>
-                                        Upload New Photo
-                                        <input
-                                            hidden
-                                            type='file'
-                                            onChange={onChange}
-                                            accept='image/png, image/jpeg'
-                                            id='account-settings-upload-image'
-                                        />
-                                    </Button>
+        <PageContainer title="profile" description="profile page">
+            <Card variant='outlined' sx={{
+                borderRadius: 7,
+                boxShadow: 10,
+                paddingX: 4, pb: 2,
+            }}>
+                <CardContent >
+                    <form>
+                        <Grid container spacing={5}>
+                            <Grid item xs={12} sx={{ marginTop: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <ImgStyled src={user.image} alt='Profile Pic' />
+                                    <Box>
+                                        <Button component='label' variant='contained' htmlFor='account-settings-upload-image'
+                                            sx={{
+                                                color: 'white',
+                                                '&:hover': {
+                                                    backgroundColor: '#ECF2FF',
+                                                    color: '#4ace3c',
+                                                },
+                                            }}>
+                                            Changer photo
+                                            <input
+                                                hidden
+                                                type='file'
+                                                onChange={onChange}
+                                                accept='image/png, image/jpeg'
+                                                id='account-settings-upload-image'
+                                            />
+                                        </Button>
 
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Grid>
+                            </Grid>
 
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Name' value={user.name} />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                type='email'
-                                label='Email'
-                                defaultValue={user.email}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Position' value={user.position} />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Phone Number' value={user.phone} />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Equipe' value={user.name} />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Supervisor' value={user.name} />
-                        </Grid>
-                        {/*             <Grid item xs={12}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label='Nom & prénom' value={user.name} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    type='email'
+                                    label='Email'
+                                    defaultValue={user.email}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label='Position' value={user.position} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label='Téléphone' value={user.phone} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label='Equipe' value={user?.supervisor?.Team?.name} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label='Superviseur' value={user?.supervisor?.name} />
+                            </Grid>
+                            {/*             <Grid item xs={12}>
                             <Button variant='contained' sx={{
                                 mr: 3.5,
                                 color: 'white',
@@ -106,10 +106,12 @@ const Profile = () => {
                                 Save Changes
                             </Button>
                         </Grid>*/}
-                    </Grid>
-                </form>
-            </CardContent>
-        </Card>
+                        </Grid>
+                    </form>
+                </CardContent>
+            </Card>
+        </PageContainer>
+
     )
 }
 

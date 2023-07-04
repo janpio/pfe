@@ -12,18 +12,10 @@ import {
 import Badge, { BadgeProps } from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import { useStore } from '../../../../state/store';
+import { MenuItemType } from '../MenuItems';
 
 type NavItemProps = {
-  item: {
-    id: string;
-    title: string;
-    icon: React.ElementType;
-    href: string;
-    subheader?: string;
-    navlabel?: boolean;
-    external?: boolean | undefined;
-    disabled?: boolean | undefined;
-  };
+  item: MenuItemType,
   pathDirect?: string,
 }
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -38,10 +30,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 const NavItem: FC<NavItemProps> = ({ item, pathDirect }) => {
 
   const user = useStore((state: any) => state.user)
-
-  const Icon = item.icon;
   const theme = useTheme<Theme>();
-  const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
   return (
     <List component="li" disablePadding key={item.id}>
@@ -58,7 +47,7 @@ const NavItem: FC<NavItemProps> = ({ item, pathDirect }) => {
           selected={pathDirect === item.href}
           target={item.external ? '_blank' : ''}
           sx={{
-            width: '200px',
+            width: '230px',//200
             whiteSpace: 'nowrap',
             marginBottom: '2px',
             padding: '8px 10px',
@@ -80,7 +69,7 @@ const NavItem: FC<NavItemProps> = ({ item, pathDirect }) => {
           }}
         >
           <ListItemIcon sx={{ minWidth: '36px', p: '3px 0', color: 'inherit' }}>
-            {itemIcon}
+            {item.icon}
           </ListItemIcon>
           <ListItemText>{item.title}</ListItemText>
         </ListItem>

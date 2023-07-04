@@ -12,10 +12,11 @@ declare module 'react-simple-chatbot' {
         floating?: boolean,
         floatingIcon?: 'string' | ReactElement,
         floatingStyle?: React.CSSProperties | any,
-        headerComponent?: any
-        opened?: boolean
-        toggleFloating?: () => void
-        cache?: false
+        headerComponent?: any,
+        opened?: boolean,
+        toggleFloating?: () => void,
+        cache?: false,
+        height?: string
 
         // Add any additional props specific to your usage
     }

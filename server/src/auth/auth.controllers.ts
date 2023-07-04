@@ -50,7 +50,12 @@ export const Login = async (req: Request, res: Response) => {
             where: {
                 email
             },
-            include: { response: true, ActivityInvitationReceived: { include: { sender: true } }, ActivityInvitationSent: true }
+            include: {
+                supervisor: { include: { Team: true } },
+                response: true,
+                ActivityInvitationReceived: { include: { sender: true } },
+                ActivityInvitationSent: true
+            }
         })
         let user: Employee | Supervisor | null = null;
 

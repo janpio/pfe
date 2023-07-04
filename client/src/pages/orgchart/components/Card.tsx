@@ -1,8 +1,11 @@
 import { FC } from "react";
-import { Button } from "@mui/material";
 import "../styles.css";
+import { useStore } from "../../../state/store";
 
 const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordinates } }) => {
+
+  const user = useStore((state: any) => state.user)
+
   return (
     <div>
       {name === "immeuble" ?
@@ -21,13 +24,13 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
 
             : name.toLowerCase().includes("equipe") ?
               (<div className="equipeContainer">
-                <h1 className="name" >
+                <h1 className="name"  >
                   {name}
                 </h1>
               </div>)
               : <div className="container">
                 <div>
-                  <button
+                  {user.name != name && <button
                     id="inviteBtn" style={{
                       position: 'absolute',
                       top: '40px',
@@ -40,8 +43,8 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
                       fontSize: '40px',
                       cursor: 'pointer',
                     }}>
-                    Invite
-                  </button>
+                    Inviter
+                  </button>}
                   <img src={imageUrl} className="avatar" alt="avatar" />:
                   {_directSubordinates ? <div className="badge">{_directSubordinates}</div> : null}
                 </div>

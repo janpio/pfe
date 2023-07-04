@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { authSlice } from './authSlice'
-import { chatbotSlice } from './chatbotSlice'
+import { authSlice, authSliceType } from './authSlice'
+import { chatbotSlice, chatbotSliceType } from './chatbotSlice'
 
 
-export const useStore = create((...props) => ({
+export const useStore = create<authSliceType & chatbotSliceType>()((...props) => ({
     ...authSlice(...props),
     ...chatbotSlice(...props),
 }))

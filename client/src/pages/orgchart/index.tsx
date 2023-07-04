@@ -15,7 +15,7 @@ const Index = () => {
     const { isLoading, data } = useQuery<Node[], any>('orgData', () => getOrgChartData(token), {
         retry: 2
         , onError(error: any) {
-            if (error.response.data.error === "Expired Token") {
+            if (error.response.data?.error === "Expired Token") {
                 toast.error(`${error.response.data.error}, Login again ! `,
                     { position: 'bottom-center' })
                 setTimeout(() => {
@@ -24,7 +24,7 @@ const Index = () => {
                 }, 3400);
                 // clearTimeout(time)
             }
-            else if (error.response.data.error === "Invalid Token") {
+            else if (error.response.data?.error === "Invalid Token") {
                 toast.error(`${error.response.data.error}, Login again`,
                     { position: 'bottom-center' })
                 setTimeout(() => {

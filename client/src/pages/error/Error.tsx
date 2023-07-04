@@ -19,7 +19,7 @@ const Error = () => (
         This page you are looking for could not be found.
       </Typography>
       <Button color="primary" variant="contained" component={Link} to="/" disableElevation>
-        Go Back to Home
+        Go Back
       </Button>
     </Container>
   </Box>

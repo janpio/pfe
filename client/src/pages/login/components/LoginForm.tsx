@@ -49,7 +49,7 @@ const LoginForm = () => {
             onSuccess({ token, user }) {
                 setRequestLoading(false);
                 login(user, token)
-                toast.success("Successfully logged in", { position: "top-center" })
+                toast.success("Successfully logged in", { position: "top-center", autoClose: 800 })
                 //     navigate('/dashboard')
                 /*      const timeout = setTimeout(() => {
                     navigate('/dashboard')
@@ -85,7 +85,7 @@ const LoginForm = () => {
                     </Box>
                     <Box mt="25px">
                         <TextField
-                            label='Password'
+                            label='Mot de passe'
                             fullWidth
                             required
                             type='password'
@@ -95,14 +95,14 @@ const LoginForm = () => {
                         />
                     </Box>
                     <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
-                        <Typography
+                        {/*<Typography
                             fontWeight="600"
                             sx={{
                                 textDecoration: 'none',
                                 color: 'primary.main',
                             }}>
                             Forgot Password ?
-                        </Typography>
+                        </Typography>*/}
                     </Stack>
                 </Stack>
                 <Box>
@@ -118,7 +118,7 @@ const LoginForm = () => {
                             },
                         }}
                     >
-                        Sign In
+                        Se connecter
                     </LoadingButton>
                 </Box>
 

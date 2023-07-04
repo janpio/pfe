@@ -16,11 +16,11 @@ export type Response = {
 }
 
 export type Question = {
-    id: number | string,
-    question: string,
+    id?: any,
+    question?: string,
     abreviation?: string,
     category?: string,
-    response: Response[] | null
+    response?: Response[] | null
 }
 export type Invitation = {
     id?: number | string,
@@ -32,7 +32,8 @@ export type Invitation = {
     date?: Date
 }
 export type Activity = {
-    id: number | string,
+    id?: number | string,
     type?: string,
+    image?: string,
     invitations?: Invitation[]
 }

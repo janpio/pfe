@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../../state/store';
 import {
   Avatar,
@@ -11,7 +11,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { IconListCheck, IconMail, IconUser } from '@tabler/icons';
+import { IconUser, IconLayoutDashboard } from '@tabler/icons';
 import ProfileImg from '/src/assets/images/profile/user-1.jpg';
 
 const Profile = () => {
@@ -19,11 +19,11 @@ const Profile = () => {
   const user = useStore((state: any) => state.user)
   const logout = useStore((state: any) => state.logout)
 
-  //  const store = useAuthStore()
-
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout()
+    logout();
+    navigate('/auth/login');
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,15 +72,27 @@ const Profile = () => {
             },
           }}
         >
+          {
+            user?.role === "ADMIN" ?
+              <MenuItem divider component={Link} to={'/admin'}>
+                <ListItemIcon>
+                  <IconLayoutDashboard width={20} />
+                </ListItemIcon>
+                <ListItemText>
+                  Admin Dashboard
+                </ListItemText>
+              </MenuItem>
+              :
+              <MenuItem divider component={Link} to={'/profile'}>
+                <ListItemIcon>
+                  <IconUser width={20} />
+                </ListItemIcon>
+                <ListItemText>
+                  My Profile
+                </ListItemText>
+              </MenuItem>
+          }
 
-          <MenuItem divider component={Link} to={'/profile'}>
-            <ListItemIcon>
-              <IconUser width={20} />
-            </ListItemIcon>
-            <ListItemText>
-              My Profile
-            </ListItemText>
-          </MenuItem>
           {/*         <MenuItem>
             <ListItemIcon>
               <IconMail width={20} />

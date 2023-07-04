@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
     Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button,
     InputLabel, MenuItem, FormControl, FormHelperText
@@ -18,6 +18,7 @@ import { useQuery } from "react-query";
 import { getActivities, sendInvitation } from '../../../features/api/api';
 import { Activity, Invitation } from "../../../features/api/types";
 import { toast } from 'react-toastify'
+import "dayjs/locale/fr";
 
 
 type InvitationFormProps = {
@@ -36,6 +37,7 @@ const invitationSchema = object({
 export type InvitationInput = TypeOf<typeof invitationSchema>;
 
 const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
+
 
     const token = useStore((state: any) => state.token)
     const teammate = useStore((state: any) => state.teammate)
@@ -105,26 +107,28 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                     setShowForm(false);
                     reset();
                 }} >
-                <DialogTitle>Invite a Teammate to an Activity</DialogTitle>
+                <DialogTitle>Inviter un collègue  à une activité</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
-                        <Grid container direction="column" spacing={2} >
+                        <Grid container direction="column" spacing={3} >
                             <Grid item>
                                 <Controller
                                     name="activity"
                                     control={control}
                                     render={({ field, fieldState: { error } }) => (
                                         <FormControl sx={{ mt: 1 }} fullWidth error={!!error} >
-                                            <InputLabel id="activity-select">Activity</InputLabel>
+                                            <InputLabel id="activity-select">Activité</InputLabel>
                                             <Select
                                                 labelId="activity-select"
                                                 id="activity-select-id"
                                                 value={field.value || ""}
-                                                label="Activity"
+                                                label="Activité"
+                                                sx={{ display: 'flex' }}
                                                 onChange={field.onChange}
                                             >
                                                 {activities?.map((activity) => (
-                                                    <MenuItem key={activity.id} value={activity.type}>
+                                                    <MenuItem divider key={activity.id} value={activity.type} sx={{ d: 'flex', alignItems: 'center', gap: 3 }}>
+                                                        <img src={activity.image} height={80} width={80} />
                                                         {activity.type}
                                                     </MenuItem>
                                                 ))}
@@ -139,8 +143,11 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                     name="date"
                                     control={control}
                                     render={({ field, fieldState: { error } }) => (
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <LocalizationProvider
+                                            adapterLocale="fr"
+                                            dateAdapter={AdapterDayjs}>
                                             <DateTimePicker
+
                                                 reduceAnimations
                                                 inputFormat="D MMMM YYYY HH:mm A"
                                                 label="Date"
@@ -161,7 +168,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                             </Grid>
                             <Grid item>
                                 <TextField
-                                    label="Teammate to invite"
+                                    label="Le collègue à inviter" //teammate to invite
                                     value={teammate?.name || " "}
                                     fullWidth
                                     type="text"
@@ -175,7 +182,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                     <Button onClick={() => {
                                         setShowForm(false)
                                         reset()
-                                    }}>Cancel</Button>
+                                    }}>Annuler</Button>
                                     <LoadingButton
                                         variant="contained"
                                         size="large"
@@ -188,7 +195,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                             },
                                         }}
                                     >
-                                        Invite
+                                        Inviter
                                     </LoadingButton>
                                 </DialogActions>
                             </Grid>

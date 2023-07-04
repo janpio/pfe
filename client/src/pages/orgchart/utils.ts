@@ -12,8 +12,7 @@ export const transformData = (orgData: any) => {
                 id: stageId,
                 name: stage.name,
                 parentId: building.id.toString(),
-                imageUrl:
-                    "https://www.signaletique.biz/25946-large_default/plaque-1er-etage-carre-alu-brosse.jpg",
+                imageUrl: stage?.image
             };
 
             const roomNodes = stage.rooms.map((room: any) => {

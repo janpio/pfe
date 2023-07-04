@@ -1,3 +1,7 @@
-.acceptButton{
-    
-}
+.avatar {    
+    width: 80;
+    height: 80;
+    border:5px solid #4ace3c;
+    border-radius: 50%;
+  
+  }

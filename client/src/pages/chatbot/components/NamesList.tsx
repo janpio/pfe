@@ -18,13 +18,13 @@ export default function NamesList({ triggerNextStep }: any) {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-helper-label">Teammates</InputLabel>
+            <FormControl sx={{ m: -1.5, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-helper-label">Employés</InputLabel>
                 <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     value={teammate || ""}
-                    label="Teammate"
+                    label="employés"
                     onChange={handleChange}>
                     {teammates.map((item: any) =>
                         <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
@@ -41,7 +41,7 @@ export default function NamesList({ triggerNextStep }: any) {
                         },
                     }}
                 >
-                    Next
+                    Suivant
                 </Button>
             </FormControl>
         </div>

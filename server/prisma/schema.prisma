@@ -3,8 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 model Employee {
@@ -102,12 +104,13 @@ model Response {
   employeeId Int?
   questionId Int?
   Employee   Employee? @relation(fields: [employeeId], references: [id])
-  Question   Question? @relation(fields: [questionId], references: [id])
+  Question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Activity {
   id          Int                  @id @default(autoincrement())
   type        String
+  image       String               @default("")
   invitations ActivityInvitation[]
 }
 

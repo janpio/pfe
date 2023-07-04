@@ -9,7 +9,7 @@ export const getOrgChart = async (req: Request, res: Response) => {
             select: {
                 id: true, name: true, stages: {
                     select: {
-                        id: true, name: true, rooms: {
+                        id: true, name: true, image: true, rooms: {
                             select: {
                                 id: true, name: true, image: true,
                                 teams: {

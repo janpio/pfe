@@ -1,15 +1,10 @@
 import {
     Box,
     Typography,
-    FormGroup,
-    FormControlLabel,
     Button,
     Stack,
-    Checkbox
+    TextField
 } from '@mui/material';
-//import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form'
-import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 
 
 const AuthLogin = () => (
@@ -20,12 +15,12 @@ const AuthLogin = () => (
                 <Box sx={{ mt: '20px' }}>
                     <Typography variant="subtitle1"
                         fontWeight={600} component="label" htmlFor='email' mb="5px">Email</Typography>
-                    <CustomTextField id="email" variant="outlined" fullWidth />
+                    <TextField id="email" variant="outlined" fullWidth />
                 </Box>
                 <Box mt="25px">
                     <Typography variant="subtitle1"
                         fontWeight={600} component="label" htmlFor='password' mb="5px" >Password</Typography>
-                    <CustomTextField id="password" type="password" variant="outlined" fullWidth />
+                    <TextField id="password" type="password" variant="outlined" fullWidth />
                 </Box>
                 <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
                     {/*<FormGroup>
