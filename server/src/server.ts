@@ -8,8 +8,11 @@ import activityRouter from './activity/activity.routes'
 
 const app = express();
 app.use(cors({
-    origin: '*'
+  origin: '*', // Allow all origins
+  methods: 'GET, POST, PUT, DELETE', // Specify the allowed HTTP methods
+  allowedHeaders: 'Content-Type, Authorization' // Specify the allowed headers
 }));
+
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors());
