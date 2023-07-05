@@ -241,7 +241,7 @@ const Chatbot = () => {
     let steps = buildSteps(questions)
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <></>
     }
 
     /* let scale = keyframes`
