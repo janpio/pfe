@@ -5,7 +5,6 @@ import { EmployeeInput } from '../../pages/orgchart/components/AddEmployeeForm';
 import { Activity, GenericResponse, Invitation, Question, Response } from './types';
 import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
-import { User } from '../../state/chatbotSlice';
 
 
 const BASE_URL = 'http://localhost:3001/api/';
