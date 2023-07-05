@@ -1,8 +1,9 @@
 import React from 'react';
 import {
     Card, CardContent, Typography, Chip,
-    Box, Avatar, IconButton
+    Box, Avatar, IconButton, CircularProgress
 } from '@mui/material';
+
 import '../style.css'
 import { useQuery } from 'react-query';
 import { getInvitationsSent } from '../../../features/api/api';
@@ -10,21 +11,14 @@ import { useStore } from '../../../state/store';
 import { formatDate } from '../../admin/utils';
 import { IconTrashXFilled } from '@tabler/icons-react';
 
-interface FeedbackEntry {
-    id: string;
-    feedback: string;
-}
 
 const Invitation: React.FC<any> = () => {
 
     const token = useStore((state: any) => state.token)
     const { id } = useStore((state: any) => state.user)
 
-    const { data: invisSent } = useQuery('invisSent', () =>
+    const { data: invisSent, isLoading } = useQuery('invisSent', () =>
         getInvitationsSent(id, token))
-
-    console.log(invisSent);
-
     /*    <Avatar
             src={inv.sender.image}
             alt={"user-avatar"}
@@ -35,6 +29,7 @@ const Invitation: React.FC<any> = () => {
                 mr: -8,
             }}
         />*/
+    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
     return (
         <>
             {invisSent?.map((inv: any) =>
@@ -99,4 +94,3 @@ const Invitation: React.FC<any> = () => {
 
 }
 export default Invitation;
-//                            <img src={inv.activity.image} height={80} />
