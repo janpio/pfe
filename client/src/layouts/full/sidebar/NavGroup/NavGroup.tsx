@@ -2,10 +2,10 @@
 import { ListSubheader, styled } from '@mui/material';
 import { FC } from 'react';
 
-interface NavGroupProps {
+type NavGroupProps = {
   item: {
-    navlabel: boolean;
-    subheader: string;
+    navlabel?: boolean;
+    subheader?: string;
   };
 }
 

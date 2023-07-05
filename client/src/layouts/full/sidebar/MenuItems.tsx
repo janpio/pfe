@@ -1,87 +1,42 @@
-import {
-  IconAperture,
-  IconCopy,
-  IconLayoutDashboard,
-  IconLogin, IconMoodHappy,
-  IconTypography,
-  IconUserPlus,
-  IconBrandAsana
-} from '@tabler/icons';
-
+import { IconUserCircle } from '@tabler/icons-react';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import ConnectWithoutContactOutlinedIcon from '@mui/icons-material/ConnectWithoutContactOutlined';
 import { uniqueId } from 'lodash';
 
-const Menuitems = [
+export type MenuItemType = {
+  id?: string;
+  title?: string;
+  icon?: JSX.Element;
+  href?: string;
+  subheader?: string;
+  navlabel?: boolean;
+  external?: boolean | undefined;
+  disabled?: boolean | undefined;
+}
+
+const Menuitems: MenuItemType[] = [
   {
     navlabel: true,
-    subheader: 'Home',
+    subheader: 'Acceuil', //Home
   },
-
-  /*{
-    id: uniqueId(),
-    title: 'Dashboard',
-    icon: IconLayoutDashboard,
-    href: '/dashboard',
-  },*/
   {
     id: uniqueId(),
-    title: 'Teams',
-    icon: IconBrandAsana,
+    title: " Mon Profil",  //teams
+    icon: <IconUserCircle />,
+    href: '/profile',
+  },
+  {
+    id: uniqueId(),
+    title: "Organigramme des équipes",  //teams
+    icon: <GroupsOutlinedIcon />,
     href: '/teams',
   },
   {
     id: uniqueId(),
-    title: 'Invitations',
-    icon: IconLayoutDashboard,
+    title: "Les Invitations des activités",
+    icon: <ConnectWithoutContactOutlinedIcon />,
     href: '/Invitations',
   },
-  /* {
-     navlabel: true,
-     subheader: 'Utilities',
-   },
-   {
-     id: uniqueId(),
-     title: 'Typography',
-     icon: IconTypography,
-     href: '/ui/typography',
-   },
-   {
-     id: uniqueId(),
-     title: 'Shadow',
-     icon: IconCopy,
-     href: '/ui/shadow',
-   },*/
-  {
-    navlabel: true,
-    subheader: 'Auth',
-  },
-  {
-    id: uniqueId(),
-    title: 'Login',
-    icon: IconLogin,
-    href: '/auth/login',
-  },
-  {
-    id: uniqueId(),
-    title: 'Register',
-    icon: IconUserPlus,
-    href: '/auth/register',
-  },
-  /*{
-    navlabel: true,
-    subheader: 'Extra',
-  },
-  {
-    id: uniqueId(),
-    title: 'Icons',
-    icon: IconMoodHappy,
-    href: '/icons',
-  },
-  {
-    id: uniqueId(),
-    title: 'Sample Page',
-    icon: IconAperture,
-    href: '/sample-page',
-  },*/
 ];
 
 export default Menuitems;

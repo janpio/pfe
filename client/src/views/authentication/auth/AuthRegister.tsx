@@ -1,10 +1,9 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
-import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import { Stack } from '@mui/system';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-interface AuthRegisterProps {
+type AuthRegisterProps = {
     title?: string;
     subtitle: ReactNode;
 }
@@ -21,15 +20,15 @@ const AuthRegister = ({ title, subtitle }: AuthRegisterProps) => (
             <Stack mb={3}>
                 <Typography variant="subtitle1"
                     fontWeight={600} component="label" htmlFor='name' mb="5px">Name</Typography>
-                <CustomTextField id="name" variant="outlined" fullWidth />
+                <TextField id="name" variant="outlined" fullWidth />
 
                 <Typography variant="subtitle1"
                     fontWeight={600} component="label" htmlFor='email' mb="5px" mt="25px">Email Address</Typography>
-                <CustomTextField id="email" variant="outlined" fullWidth />
+                <TextField id="email" variant="outlined" fullWidth />
 
                 <Typography variant="subtitle1"
                     fontWeight={600} component="label" htmlFor='password' mb="5px" mt="25px">Password</Typography>
-                <CustomTextField id="password" variant="outlined" fullWidth />
+                <TextField id="password" variant="outlined" fullWidth />
             </Stack>
             <Button sx={{
                 color: 'white', "&:hover": {

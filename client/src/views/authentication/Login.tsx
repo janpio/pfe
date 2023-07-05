@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
-//components
 import PageContainer from '../../components/container/PageContainer';
 import Logo from '../../layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
 
-const Login2 = () => {
+const Login = () => {
 
   return (
     <PageContainer title="Login" description="this is Login page">
@@ -39,27 +38,7 @@ const Login2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
-              <AuthLogin
-
-                subtitle={
-                  <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
-                    <Typography color="textSecondary" variant="h6" fontWeight="500">
-                      New to FIS?
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to="/auth/register"
-                      fontWeight="600"
-                      sx={{
-                        textDecoration: 'none',
-                        color: 'primary.main',
-                      }}
-                    >
-                      Create an account
-                    </Typography>
-                  </Stack>
-                }
-              />
+              <AuthLogin />
             </Card>
           </Grid>
         </Grid>
@@ -68,4 +47,4 @@ const Login2 = () => {
   );
 };
 
-export default Login2;
+export default Login;

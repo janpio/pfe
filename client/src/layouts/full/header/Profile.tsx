@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useStore } from '../../../state/store';
 import {
   Avatar,
   Box,
@@ -8,86 +9,112 @@ import {
   IconButton,
   MenuItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from '@mui/material';
-import { IconListCheck, IconMail, IconUser } from '@tabler/icons';
+import { IconUser, IconLayoutDashboard } from '@tabler/icons';
 import ProfileImg from '/src/assets/images/profile/user-1.jpg';
 
 const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
+
+  const user = useStore((state: any) => state.user)
+  const logout = useStore((state: any) => state.logout)
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth/login');
+  }
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
-    <Box>
-      <IconButton
-        size="large"
-        aria-label="show 11 new notifications"
-        color="inherit"
-        aria-controls="msgs-menu"
-        aria-haspopup="true"
-        sx={{
-          ...(typeof anchorEl2 === 'object' && {
-            color: 'primary.main',
-          }),
-        }}
-        onClick={handleClick2}
-      >
-        <Avatar
-          src={ProfileImg}
-          alt={ProfileImg}
+    <>
+      <Box>
+        <IconButton
+          size="large"
+          aria-label="show profile & logout"
+          color="inherit"
+          aria-controls="msgs-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <Avatar
+            src={user?.image || ProfileImg}
+            alt={ProfileImg}
+            sx={{
+              width: 35,
+              height: 35,
+            }}
+          />
+        </IconButton>
+        {/* ------------------------------------------- */}
+        {/* Message Dropdown */}
+        {/* ------------------------------------------- */}
+        <Menu
+          id="msgs-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           sx={{
-            width: 35,
-            height: 35,
+            '& .MuiMenu-paper': {
+              width: '200px',
+            },
           }}
-        />
-      </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
-      <Menu
-        id="msgs-menu"
-        anchorEl={anchorEl2}
-        keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        sx={{
-          '& .MuiMenu-paper': {
-            width: '200px',
-          },
-        }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button to="/auth/login" variant="outlined" color="primary" component={Link} fullWidth>
-            Logout
-          </Button>
-        </Box>
-      </Menu>
-    </Box>
+        >
+          {
+            user?.role === "ADMIN" ?
+              <MenuItem divider component={Link} to={'/admin'}>
+                <ListItemIcon>
+                  <IconLayoutDashboard width={20} />
+                </ListItemIcon>
+                <ListItemText>
+                  Admin Dashboard
+                </ListItemText>
+              </MenuItem>
+              :
+              <MenuItem divider component={Link} to={'/profile'}>
+                <ListItemIcon>
+                  <IconUser width={20} />
+                </ListItemIcon>
+                <ListItemText>
+                  My Profile
+                </ListItemText>
+              </MenuItem>
+          }
+
+          {/*         <MenuItem>
+            <ListItemIcon>
+              <IconMail width={20} />
+            </ListItemIcon>
+            <ListItemText>My Account</ListItemText>
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <IconListCheck width={20} />
+            </ListItemIcon>
+            <ListItemText>My Tasks</ListItemText>
+        </MenuItem>*/}
+          <Box mt={1} py={1} px={2}>
+            <Button variant="outlined" color="primary" onClick={handleLogout} fullWidth>
+              Logout
+            </Button>
+          </Box>
+        </Menu>
+      </Box>
+
+    </>
+
   );
 };
 
