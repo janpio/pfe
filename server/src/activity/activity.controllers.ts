@@ -100,7 +100,7 @@ export const getInvitationsReceived = async (req: Request, res: Response) => {
 
         const invitationsReceived = await prisma.employee.findUnique({
             where: {
-                id: employeeId
+                id: Number(employeeId)
             },
             select: {
                 ActivityInvitationReceived: {
