@@ -5,10 +5,9 @@ import { EmployeeInput } from '../../pages/orgchart/components/AddEmployeeForm';
 import { Activity, GenericResponse, Invitation, Question, Response } from './types';
 import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
-import { User } from '../../state/chatbotSlice';
 
 
-const BASE_URL = 'http://localhost:3001/api/';
+const BASE_URL = "https://deploy-pfe-api.vercel.app/api/";
 
 export const api = axios.create({
     baseURL: BASE_URL,

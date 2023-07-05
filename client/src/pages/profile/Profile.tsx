@@ -94,18 +94,6 @@ const Profile = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField fullWidth label='Superviseur' value={user?.supervisor?.name} />
                             </Grid>
-                            {/*             <Grid item xs={12}>
-                            <Button variant='contained' sx={{
-                                mr: 3.5,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: '#ECF2FF',
-                                    color: '#4ace3c',
-                                },
-                            }}>
-                                Save Changes
-                            </Button>
-                        </Grid>*/}
                         </Grid>
                     </form>
                 </CardContent>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Card, CardContent, Typography, Chip,
+    Card, CardContent, Typography, Chip, CircularProgress,
     Button, Box, Avatar, Theme, useTheme, IconButton
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
@@ -12,20 +12,15 @@ import { useStore } from '../../../state/store';
 import { formatDate } from '../../admin/utils';
 import { IconTrashXFilled } from '@tabler/icons-react';
 
-interface FeedbackEntry {
-    id: string;
-    feedback: string;
-}
 
 const Invitation: React.FC<any> = () => {
 
     const token = useStore((state: any) => state?.token)
-    const user = useStore((state: any) => state?.user)
     const { id } = useStore((state: any) => state?.user)
 
     const queryClient = useQueryClient()
 
-    const { data: invisReceived } = useQuery('invisReceived', () =>
+    const { data: invisReceived, isLoading } = useQuery('invisReceived', () =>
         getInvitationsReceived(id, token))
 
     const { mutate: ChangeStatus } =
@@ -38,15 +33,9 @@ const Invitation: React.FC<any> = () => {
 
         });
 
-    const [feedbackEntries, setFeedbackEntries] = React.useState<FeedbackEntry[]>([]);
-    //  const [feedback, setFeedback] = React.useState('');
-    // const [showFeedbackInput, setShowFeedbackInput] = React.useState(false);
 
     const theme = useTheme<Theme>();
 
-    /* const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-         setFeedback(event.target.value);
-     };*/
 
     const handleAccept = (invitationId: number) => {
         ChangeStatus([invitationId, 'ACCEPTED'])
@@ -55,28 +44,7 @@ const Invitation: React.FC<any> = () => {
     const handleDecline = (invitationId: number) => {
         ChangeStatus([invitationId, 'DECLINED'])
     };
-
-    /*const handleAddFeedback = () => {
-        setShowFeedbackInput(true);
-    };
-
-    const handleSaveFeedback = () => {
-        if (feedback) {
-            const newFeedbackEntry: FeedbackEntry = {
-                id: Date.now().toString(),
-                feedback: feedback,
-            };
-
-            setFeedbackEntries([...feedbackEntries, newFeedbackEntry]);
-            setFeedback('');
-            setShowFeedbackInput(false);
-        }
-    };*/
-
-    const handleRemoveFeedback = (feedbackId: string) => {
-        const updatedFeedbackEntries = feedbackEntries.filter((entry) => entry.id !== feedbackId);
-        setFeedbackEntries(updatedFeedbackEntries);
-    };
+    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
     return (
         <>
             {invisReceived?.map((inv: any) =>
@@ -157,52 +125,6 @@ const Invitation: React.FC<any> = () => {
                                     Refuser
                                 </Button>
                             </Box>}
-                        {/*  <Typography variant="h6" component="div" sx={{ mt: 2 }}>
-                            Feedback
-                        </Typography>*/}
-                        {/*feedbackEntries.length > 0 && (
-                            <Box sx={{ mt: 1 }}>
-                                {feedbackEntries.map((entry) => (
-                                    <Typography variant="body1" key={entry.id} sx={{ mb: 1 }}>
-                                        Anes: {entry.feedback}
-                                    </Typography>
-                                ))}
-                            </Box>
-                        )}
-                        {showFeedbackInput ? (
-                            <>
-                                <TextField
-                                    multiline
-                                    rows={4}
-                                    variant="outlined"
-                                    value={feedback}
-                                    onChange={handleFeedbackChange}
-                                    sx={{ mt: 1 }}
-                                    fullWidth
-                                />
-                                <Button variant="contained" onClick={handleSaveFeedback} sx={{
-                                    mt: 1,
-                                    color: 'white',
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.primary.light,
-                                        color: theme.palette.primary.main,
-                                    },
-                                }}>
-                                    Save Feedback
-                                </Button>
-                            </>
-                        ) : (
-                            <Button variant="contained" onClick={handleAddFeedback} sx={{
-                                mt: 1,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.primary.light,
-                                    color: theme.palette.primary.main,
-                                },
-                            }}>
-                                Add Feedback
-                            </Button>
-                        )*/}
                     </CardContent>
                 </Card >)
             }
