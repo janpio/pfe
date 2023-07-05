@@ -15,11 +15,13 @@ app.use(cors({
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors());
+app.get('/', (req, res) => {
+    res.send('hello')
+})
 app.use('/api/orgchart', orgRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/chatbot', chatbotRouter)
 app.use('/api/activity', activityRouter);
-
 
 
 app.listen(3001, () => {
