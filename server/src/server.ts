@@ -9,7 +9,7 @@ import activityRouter from './activity/activity.routes'
 const app = express();
 app.use(cors(
     {
-        origin:["https://deploy-pfe-frontend.vercel.app/"],
+        origin:[*"],
         methods:["POST","GET","PUT"],
         credentials:true
     }
