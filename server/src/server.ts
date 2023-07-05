@@ -7,9 +7,7 @@ import chatbotRouter from './chatbot/chatbot.routes'
 import activityRouter from './activity/activity.routes'
 
 const app = express();
-app.use(cors({
-  origin: '*', // Allow all origins
-}));
+app.use(cors());
 
 app.use(morgan('dev'))
 app.use(express.json())
