@@ -7,7 +7,13 @@ import chatbotRouter from './chatbot/chatbot.routes'
 import activityRouter from './activity/activity.routes'
 
 const app = express();
-app.use(cors());
+app.use(cors(
+    {
+        origin:["https://deploy-pfe-frontend.vercel.app/"],
+        methods:["POST","GET","PUT"],
+        credentials:true
+    }
+));
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors());
