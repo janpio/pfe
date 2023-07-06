@@ -36,6 +36,7 @@ model Supervisor {
   image     String?
   email     String?    @unique
   password  String?
+  phone     Int        @default(12345678)
   createdAt DateTime   @default(now())
   position  String?
   updatedAt DateTime   @updatedAt

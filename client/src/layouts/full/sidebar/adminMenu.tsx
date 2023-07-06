@@ -8,7 +8,7 @@ import { MenuItemType } from './MenuItems';
 const adminItems: MenuItemType[] = [
     {
         navlabel: true,
-        subheader: 'Acceuil', //Home
+        subheader: 'Home',
     },
 
     {
@@ -20,7 +20,7 @@ const adminItems: MenuItemType[] = [
 
     {
         id: uniqueId(),
-        title: "Organigramme des équipes",  //teams
+        title: "Organigramme",
         icon: <GroupsOutlinedIcon />,
         href: '/teams',
     },

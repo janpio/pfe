@@ -17,7 +17,7 @@ const Admin = () => {
 
     return (
         <>
-            <PageContainer title="admin" description="this is the admin dashboard">
+            <PageContainer title="Admin Dashboard" description="Admin dashboard">
                 <Box marginTop={-2}>
                     <TabContext value={value}>
                         <Box sx={{
@@ -29,11 +29,11 @@ const Admin = () => {
                                     onChange={handleChange}>
                                     <Tab
                                         icon={<CallReceivedIcon />}
-                                        label="Activités" value="1" />
+                                        label="Activities" value="1" />
                                     <Tab icon={<IconMessage2Question />}
-                                        label="Questions de Chatbot" value="2" />
+                                        label="Chatbot Questions" value="2" />
                                     <Tab icon={<ConnectWithoutContactOutlinedIcon />}
-                                        label="Toutes les invitations des activités" value="3" />
+                                        label="All activity invitations" value="3" />
                                 </TabList>
                             </Box>
 

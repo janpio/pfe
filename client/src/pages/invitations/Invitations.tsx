@@ -18,7 +18,7 @@ function App() {
 
     return (
         <>
-            <PageContainer title="invitations" description="this is invitations page">
+            <PageContainer title="Invitations" description="Invitations page">
                 <Box marginTop={-2}>
                     <TabContext value={value}>
                         <Box sx={{
@@ -30,9 +30,9 @@ function App() {
                                     onChange={handleChange}>
                                     <Tab
                                         icon={<CallReceivedIcon />}
-                                        label="Invitations reçues" value="1" />
+                                        label="Invitations Received" value="1" />
                                     <Tab icon={<SendIcon />}
-                                        label="Invitations Envoyées" value="2" />
+                                        label="Invitations Sent" value="2" />
                                 </TabList>
                             </Box>
 

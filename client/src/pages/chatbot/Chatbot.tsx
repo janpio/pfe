@@ -1,5 +1,5 @@
 import ChatBot from "react-simple-chatbot"
-import { stepifyScript } from "./Step";
+import { stepifyScript } from "./utils";
 import { useState } from "react";
 import NamesList from "./components/NamesList";
 import QuestionsList from "./components/QuestionsList";
@@ -9,13 +9,13 @@ import { getQuestions, saveResponse } from "../../features/api/api";
 import { Question, Response } from "../../features/api/types";
 import { ThemeProvider } from 'styled-components';
 import Icon from "./components/Icon";
+import FIS_icon from '/src/assets/images/logos/FIS_icon.png';
 import Header from "./components/Header";
-
 
 
 const Chatbot = () => {
 
-    const theme = {
+    const theme = {         //chatbtor theme
         background: '#f5f8fb',
         fontFamily: 'Helvetica Neue',
         headerFontColor: '#fff',
@@ -277,7 +277,7 @@ const Chatbot = () => {
                 width={"400px"}
                 height={"600px"}
                 userAvatar={user?.image}
-                botAvatar={"https://play-lh.googleusercontent.com/sIPvD23PRhSQjuqLFUtZg5g92sO851MRsSon3N3k6fDlCtzgLi1lTPvXOUAXxG5gHg=w240-h480-rw"}
+                botAvatar={FIS_icon}
             />
         </ThemeProvider>
 

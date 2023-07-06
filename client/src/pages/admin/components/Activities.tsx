@@ -15,15 +15,16 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { custom, object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Activity } from '../../../features/api/types';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import SkeletonList from '../../../components/shared/SkeletonList';
 
-const MAX_FILE_SIZE = 1000000;
+// for activity input validation
+const MAX_FILE_SIZE = 1000000;  // max size of image
 const ACCEPTED_IMAGE_TYPES: Array<string> = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
 const ActivitySchema = object({
-    type: string().nonempty('Champ requis !'),
+    type: string().nonempty('Required !'),
     image: custom<File>()
-        .refine((file: any) => !!file, { message: 'Vous devez choisir une image !' }) //if fails =>msg
+        .refine((file: any) => !!file, { message: 'Choose an image !' }) //if fails =>msg
         .refine((file: any) => file?.size < MAX_FILE_SIZE, { message: 'Max file size is 1MB.' })
         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             { message: 'Only these types are allowed .jpg, .jpeg, .png and .webp' },
@@ -34,11 +35,11 @@ export type ActivityInput = TypeOf<typeof ActivitySchema>;
 
 const Activities: React.FC<any> = () => {
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
-    const token = useStore((state: any) => state.token)
-    const setRequestLoading = useStore((state: any) => state.setRequestLoading)
-    const requestLoading = useStore((state: any) => state.requestLoading)
+    const token = useStore((state: any) => state.token);
+    const setRequestLoading = useStore((state: any) => state.setRequestLoading);
+    const requestLoading = useStore((state: any) => state.requestLoading);
 
     const [open, setOpen] = useState(false)
 
@@ -53,45 +54,49 @@ const Activities: React.FC<any> = () => {
 
     });
 
-    const { data: activities } = useQuery('activities', () =>
-        getActivities(token))
+    //get all activities
+    const { data: activities, isLoading } = useQuery('activities', () =>
+        getActivities(token));
 
+    //delete activity
     const { mutate: delActivity } =
         useMutation((id: number) =>
             deleteActivity(id, token), {
             onSuccess: () => {
-                queryClient.invalidateQueries('activities')
-                toast.success("Activité supprimé avec succés", { position: "bottom-center", autoClose: 800 })
+                queryClient.invalidateQueries('activities');
+                toast.success("Activity deleted successfully", { position: "bottom-center", autoClose: 800 });
             }
 
         });
 
+    //add new activity
     const { mutate: addNewActivity } =
         useMutation((activity: Activity) =>
             addActivity(activity, token), {
             onSuccess: () => {
-                queryClient.invalidateQueries('activities')
-                toast.success("Activité ajoute avec succés", { position: "bottom-center", autoClose: 800 })
-                reset()
-                setRequestLoading(false)
-                setOpen(false)
+                queryClient.invalidateQueries('activities');
+                toast.success("Activity added successfully", { position: "bottom-center", autoClose: 800 });
+                reset();
+                setRequestLoading(false);
+                setOpen(false);
 
             }
 
         });
 
+    //used cloudinary to host images
     const onSubmitHandler: SubmitHandler<ActivityInput> = async (values) => {
-        const form = new FormData()
+        const form = new FormData();
         setRequestLoading(true);
-        form.append("file", values.image)
-        form.append("upload_preset", "splash")
-        const response = await axios.post("https://api.cloudinary.com/v1_1/dsjjqkvf1/upload", form)
-        const imageLink = await response.data.secure_url
-        addNewActivity({ type: values.type, image: imageLink })
+        form.append("file", values.image);
+        form.append("upload_preset", "splash");
+        const response = await axios.post("https://api.cloudinary.com/v1_1/dsjjqkvf1/upload", form);
+        const imageLink = await response.data.secure_url;
+        addNewActivity({ type: values.type, image: imageLink });
     };
     return (
         <>
-            {<Button component='label' variant='contained' htmlFor='add-activity'
+            <Button component='label' variant='contained' htmlFor='add-activity'
                 onClick={() => setOpen(!open)}
                 startIcon={<IconPlus />}
                 sx={{
@@ -102,9 +107,16 @@ const Activities: React.FC<any> = () => {
                         color: '#4ace3c',
                     },
                 }}>
-                Ajouter
+                Add
 
-            </Button>}
+            </Button>
+
+            {isLoading &&
+                <Box display={'flex'} flexDirection={'row'}>
+                    <SkeletonList rowsNum={4} h={270} w={237.5} />
+                </Box>
+            }
+
             <Box display={'flex'} flexWrap={'wrap'}>
                 {activities?.map((activity: any) =>
                     <Card
@@ -116,9 +128,7 @@ const Activities: React.FC<any> = () => {
                             boxShadow: 4,
                             height: 270,
                             width: 237.5
-
-                        }}
-                    >
+                        }}>
                         <CardActionArea disableRipple component={'span'}> {/*span to solve validateDOMNesting button Warning,nested buttons*/}
                             <CardMedia
                                 component="img"
@@ -152,14 +162,14 @@ const Activities: React.FC<any> = () => {
                         setOpen(false)
                         reset();
                     }} >
-                    <DialogTitle>Ajouter une activité</DialogTitle>
+                    <DialogTitle>Add an activity</DialogTitle>
                     <DialogContent >
                         <form onSubmit={handleSubmit(onSubmitHandler)}>
                             <Grid container direction="column" spacing={2} >
                                 <Grid item>
                                     <TextField
                                         sx={{ mt: 1 }}
-                                        label='Nom'
+                                        label='Activity'
                                         fullWidth
                                         type='text'
                                         error={!!errors.type}
@@ -174,7 +184,7 @@ const Activities: React.FC<any> = () => {
 
                                         render={({ field, fieldState: { error } }) => (
                                             <FormControl error={!!error} >
-                                                <Typography sx={{ mb: 1 }}>Choisir une image :</Typography>
+                                                <Typography sx={{ mb: 1 }}>Choose an image :</Typography>
                                                 <Button
                                                     variant="contained"
                                                     component="label"
@@ -205,7 +215,7 @@ const Activities: React.FC<any> = () => {
                                         <Button onClick={() => {
                                             setOpen(false)
                                             reset()
-                                        }}>Annuler</Button>
+                                        }}>Cancel</Button>
                                         <LoadingButton
                                             variant="contained"
                                             size="large"
@@ -218,7 +228,7 @@ const Activities: React.FC<any> = () => {
                                                 },
                                             }}
                                         >
-                                            Ajouter
+                                            Add
                                         </LoadingButton>
                                     </DialogActions>
                                 </Grid>

@@ -7,7 +7,7 @@ import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
 
 
-const BASE_URL = 'https://pfe-five.vercel.app/api/';
+const BASE_URL = 'http://localhost:3001/api/';
 
 export const api = axios.create({
     baseURL: BASE_URL,
@@ -116,6 +116,14 @@ export const changeInvitationStatus = async (invitationId: number, status: strin
 export const changeHasRead = async (invitationId: number, hasRead: boolean, token: string) => {
     const response = await api.patch<Invitation>(`activity/changeHasRead/${invitationId}`,
         { hasRead }, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+
+//profil
+export const changeProfilPhoto = async (employeeId: number | string, photo: string, token: string) => {
+    const response = await api.patch<any>(`/profil/ChangeProfilePhoto/${employeeId}`,
+        { image: photo }, { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }

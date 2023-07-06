@@ -9,7 +9,7 @@ const Org = Loadable(lazy(() => import('../pages/orgchart')))
 const Error = Loadable(lazy(() => import('../pages/error/Error')));
 const Register = Loadable(lazy(() => import('../pages/signup/Register')));
 const Login = Loadable(lazy(() => import('../pages/login/Login')));
-const Invitation = Loadable(lazy(() => import('../pages/invitations')));
+const Invitation = Loadable(lazy(() => import('../pages/invitations/Invitations')));
 const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
 const Admin = Loadable(lazy(() => import('../pages/admin/Admin')));
 

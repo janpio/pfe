@@ -10,7 +10,7 @@ import {
     changeInvitationStatus,
     changeHasRead
 } from "./activity.controllers";
-//import { authMiddleware } from "../auth.middleware";
+//import { authMiddleware } from "..//middlewares/auth.middleware";
 
 const router = Router();
 //router.use(authMiddleware)

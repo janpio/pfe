@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getOrgChart, addEmployee } from "./orgChart.controllers";
-import { authMiddleware } from "../auth.middleware";
+import { authMiddleware } from "../middlewares/auth.middleware";
 const router = Router();
 
 router.use(authMiddleware)

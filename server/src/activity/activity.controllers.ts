@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Employee, Supervisor } from '@prisma/client';
 import prisma from '../../prisma/client';
 
 export const getActivties = async (req: Request, res: Response) => {
@@ -51,7 +52,23 @@ export const sendInvitation = async (req: Request, res: Response) => {
     const { sender, recipient, activity, date } = req.body;
 
     try {
+        let user: Employee | Supervisor | null = null;
 
+        const employee = await prisma.employee.findFirst({
+            where: {
+                name: sender,
+            }
+        })
+        if (employee) {
+            user = employee
+        } else {
+            user = await prisma.supervisor.findFirst({
+                where: {
+                    name: sender,
+                }
+            })
+        }
+        console.log(user)
         const activityChosen = await prisma.activity.findFirst({
             where: {
                 type: activity
@@ -65,7 +82,7 @@ export const sendInvitation = async (req: Request, res: Response) => {
 
         const invitation = await prisma.activityInvitation.create({
             data: {
-                senderId: sender,
+                senderId: user?.id,
                 recipientId: teammateToInvite?.id,
                 activityId: activityChosen?.id,
                 date
@@ -78,6 +95,7 @@ export const sendInvitation = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const getAllInvitations = async (req: Request, res: Response) => {
     try {
 
@@ -94,6 +112,7 @@ export const getAllInvitations = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const getInvitationsReceived = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
     try {

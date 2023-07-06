@@ -1,38 +1,31 @@
 import React from 'react';
 import {
     Card, CardContent, Typography, Chip,
-    Box, Avatar, IconButton, CircularProgress
+    Box, Avatar, IconButton
 } from '@mui/material';
-
-import '../style.css'
+import SkeletonList from '../../../components/shared/SkeletonList';
 import { useQuery } from 'react-query';
 import { getInvitationsSent } from '../../../features/api/api';
 import { useStore } from '../../../state/store';
 import { formatDate } from '../../admin/utils';
 import { IconTrashXFilled } from '@tabler/icons-react';
+import '../style.css'
 
 
-const Invitation: React.FC<any> = () => {
+const InvitationsSent: React.FC<any> = () => {
 
     const token = useStore((state: any) => state.token)
     const { id } = useStore((state: any) => state.user)
 
     const { data: invisSent, isLoading } = useQuery('invisSent', () =>
         getInvitationsSent(id, token))
-    /*    <Avatar
-            src={inv.sender.image}
-            alt={"user-avatar"}
-            sx={{
-                border: '4px solid #4ace3c',
-                width: 40,
-                height: 40,
-                mr: -8,
-            }}
-        />*/
-    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
+
+    if (!invisSent) return <></>;
+    if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />;
+
     return (
         <>
-            {invisSent?.map((inv: any) =>
+            {invisSent && invisSent?.map((inv: any) =>
                 <Card key={inv.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
                     <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}  >
                         <Box display={"flex"} gap={10} alignItems={'center'}>
@@ -47,7 +40,7 @@ const Invitation: React.FC<any> = () => {
                                     }}
                                 />
                                 <Typography display={'flex'} gap={1} variant="h6" component="div">
-                                    Invitation envoyé à
+                                    Invitation sent to
                                     <Box color='red'>
                                         {inv.recipient.name}
                                     </Box>
@@ -55,13 +48,11 @@ const Invitation: React.FC<any> = () => {
                             </Box>
                             <Box display={'flex'} alignItems={'center'} gap={1} >
                                 <Typography variant="h6" component="div">
-                                    État :
+                                    State :
                                 </Typography>
                                 <Typography variant="h6" component="div">
                                     <Chip
-                                        label={inv.status === 'PENDING' ? 'En Attente'
-                                            : inv.status === "ACCEPTED" ? 'Accepté'
-                                                : 'Refusé'}
+                                        label={inv.status}
                                         color={inv.status === 'PENDING' ? 'warning'
                                             : inv.status === "ACCEPTED" ? 'primary'
                                                 : 'error'} sx={{ color: 'white' }} />
@@ -72,7 +63,7 @@ const Invitation: React.FC<any> = () => {
                         <Box display={'flex'} alignItems={'center'} marginTop={1}  >
                             <img src={inv.activity.image} height={80} style={{ borderRadius: '50%' }} />
                             <Typography variant="h6" marginTop={1} marginLeft={1} display={'flex'}>
-                                <Box color='#539BFF'>Activité</Box> : {inv.activity.type}
+                                <Box color='#539BFF'>Activity</Box> : {inv.activity.type}
                             </Typography>
                             <Typography
                                 variant='h6'
@@ -93,4 +84,4 @@ const Invitation: React.FC<any> = () => {
     );
 
 }
-export default Invitation;
+export default InvitationsSent;

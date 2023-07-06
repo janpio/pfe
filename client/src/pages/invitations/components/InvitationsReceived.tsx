@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-    Card, CardContent, Typography, Chip, CircularProgress,
+    Card, CardContent, Typography, Chip,
     Button, Box, Avatar, Theme, useTheme, IconButton
 } from '@mui/material';
+import SkeletonList from '../../../components/shared/SkeletonList';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { changeInvitationStatus } from '../../../features/api/api';
@@ -13,7 +14,7 @@ import { formatDate } from '../../admin/utils';
 import { IconTrashXFilled } from '@tabler/icons-react';
 
 
-const Invitation: React.FC<any> = () => {
+const InvitationsReceived: React.FC<any> = () => {
 
     const token = useStore((state: any) => state?.token)
     const { id } = useStore((state: any) => state?.user)
@@ -44,10 +45,11 @@ const Invitation: React.FC<any> = () => {
     const handleDecline = (invitationId: number) => {
         ChangeStatus([invitationId, 'DECLINED'])
     };
-    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
+    if (!invisReceived) return <></>;
+    if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />;
     return (
         <>
-            {invisReceived?.map((inv: any) =>
+            {invisReceived && invisReceived?.map((inv: any) =>
                 <Card key={inv.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
                     <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box display={"flex"} gap={10} alignItems={'center'}>
@@ -62,20 +64,18 @@ const Invitation: React.FC<any> = () => {
                                 }}
                             />
                             <Typography display={'flex'} gap={1} variant="h6" component="div">
-                                Invitation reçue de
+                                Invitation received from
                                 <Box color='red'>
                                     {inv.sender.name}
                                 </Box>
                             </Typography>
                             <Box display={'flex'} alignItems={'center'} gap={1} >
                                 <Typography variant="h6" component="div">
-                                    État :
+                                    State :
                                 </Typography>
                                 <Typography variant="h6" component="div">
                                     <Chip
-                                        label={inv.status === 'PENDING' ? 'En Attente'
-                                            : inv.status === "ACCEPTED" ? 'Accepté'
-                                                : 'Refusé'}
+                                        label={inv.status}
                                         color={inv.status === 'PENDING' ? 'warning'
                                             : inv.status === "ACCEPTED" ? 'primary'
                                                 : 'error'} sx={{ color: 'white' }} />
@@ -87,7 +87,7 @@ const Invitation: React.FC<any> = () => {
                         <Box display={'flex'} alignItems={'center'} marginTop={1}>
                             <img src={inv.activity.image} height={80} style={{ borderRadius: '50%' }} />
                             <Typography variant="h6" marginTop={1} marginLeft={1} display={'flex'}>
-                                <Box color='#539BFF'>Activité</Box> : {inv.activity.type}
+                                <Box color='#539BFF'>Activity</Box> : {inv.activity.type}
                             </Typography>
                             <Typography
                                 variant='h6'
@@ -115,14 +115,14 @@ const Invitation: React.FC<any> = () => {
                                             color: theme.palette.primary.main,
                                         },
                                     }}>
-                                    Accepter
+                                    Accept
                                 </Button>
                                 <Button
                                     startIcon={<ClearIcon />}
                                     variant="contained"
                                     onClick={() => handleDecline(inv.id)}
                                     color='error'>
-                                    Refuser
+                                    Refuse
                                 </Button>
                             </Box>}
                     </CardContent>
@@ -132,4 +132,4 @@ const Invitation: React.FC<any> = () => {
     );
 
 }
-export default Invitation;
+export default InvitationsReceived;

@@ -1,11 +1,11 @@
 import OrganizationalChart from './components/orgChart';
 import PageContainer from '../../components/container/PageContainer';
 import { getOrgChartData } from '../../features/api/api';
-import { CircularProgress } from '@mui/material';
 import { useQuery } from 'react-query';
 import { Node } from './types';
 import { toast } from 'react-toastify'
 import { useStore } from '../../state/store';
+import Spinner from '../../components/shared/Spinner';
 
 const Index = () => {
 
@@ -35,11 +35,11 @@ const Index = () => {
             }
         }
     });
-    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
+    if (isLoading) return <Spinner />
     if (!data) return <div>No data !!</div>;
     return (
         <>
-            <PageContainer title="orgchart" description="this is orgchart">
+            <PageContainer title="Organizational chart" description="organizational chart of the company">
                 <OrganizationalChart data={data} />
             </PageContainer>
 

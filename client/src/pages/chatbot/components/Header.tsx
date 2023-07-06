@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { FC } from 'react';
 
-const Header: FC<any> = ({ setOpen, open }) => {
+const Header: FC<any> = ({ setOpen }) => {
     return (
         <Box >
             <AppBar position="static">
@@ -17,7 +17,7 @@ const Header: FC<any> = ({ setOpen, open }) => {
                         </span>
                     </div>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-                        FIS ChatBot de communication
+                        FIS ChatBot
                     </Typography>
                     <Button onClick={() => setOpen(false)}
                         sx={{ color: 'white', marginRight: '-20px' }}>

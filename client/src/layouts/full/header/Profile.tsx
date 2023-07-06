@@ -42,7 +42,7 @@ const Profile = () => {
           size="large"
           aria-label="show profile & logout"
           color="inherit"
-          aria-controls="msgs-menu"
+          aria-controls="profile-logout-menu"
           aria-haspopup="true"
           onClick={handleClick}
         >
@@ -55,11 +55,8 @@ const Profile = () => {
             }}
           />
         </IconButton>
-        {/* ------------------------------------------- */}
-        {/* Message Dropdown */}
-        {/* ------------------------------------------- */}
         <Menu
-          id="msgs-menu"
+          id="profile-logout-menu"
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}

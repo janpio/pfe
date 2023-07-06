@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Card, CardContent, Typography, Chip,
     Box, Avatar
@@ -7,14 +7,17 @@ import { useQuery } from 'react-query';
 import { getAllInvitations } from '../../../features/api/api';
 import { useStore } from '../../../state/store';
 import { formatDate } from '../utils';
+import SkeletonList from '../../../components/shared/SkeletonList';
 
 const Invitation: React.FC<any> = () => {
 
-    const token = useStore((state: any) => state.token)
+    const token = useStore((state: any) => state.token);
 
-    const { data: allInvitations } = useQuery('allInvitations', () =>
-        getAllInvitations(token))
+    //get all activity invitation sent between employees
+    const { data: allInvitations, isLoading } = useQuery('allInvitations', () =>
+        getAllInvitations(token));
 
+    if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />
     return (
         <>
             {allInvitations?.map((inv: any) =>
@@ -33,9 +36,9 @@ const Invitation: React.FC<any> = () => {
                                     }}
                                 />
                                 <Typography display={'flex'} gap={1} variant="h6" component="div" >
-                                    Invitation envoyé  de
+                                    Invitation Sent  from
                                     <Box color='red'>{inv.sender.name}</Box>
-                                    à <Box color='red'>{inv.recipient.name}</Box>
+                                    to <Box color='red'>{inv.recipient.name}</Box>
                                 </Typography>
 
                                 <Avatar
@@ -52,13 +55,11 @@ const Invitation: React.FC<any> = () => {
 
                             <Box display={'flex'} alignItems={'center'} marginRight={25} gap={1} >
                                 <Typography variant="h6" component="div">
-                                    État :
+                                    State :
                                 </Typography>
                                 <Typography variant="h6" component="div">
                                     <Chip
-                                        label={inv.status === 'PENDING' ? 'En Attente'
-                                            : inv.status === "ACCEPTED" ? 'Accepté'
-                                                : 'Refusé'}
+                                        label={inv.status}
                                         color={inv.status === 'PENDING' ? 'warning'
                                             : inv.status === "ACCEPTED" ? 'primary'
                                                 : 'error'} sx={{ color: 'white' }} />
@@ -68,7 +69,7 @@ const Invitation: React.FC<any> = () => {
                         <Box display={'flex'} alignItems={'center'} gap={1} marginTop={1} >
                             <img src={inv.activity.image} height={80} style={{ borderRadius: '50%' }} />
                             <Typography variant="h6" sx={{ mt: 1 }} display={'flex'}>
-                                <Box color='#539BFF'>Activité</Box> : {inv.activity.type}
+                                <Box color='#539BFF'>Activity</Box> : {inv.activity.type}
                             </Typography>
                             <Typography
                                 variant='h6'

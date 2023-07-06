@@ -4,7 +4,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import { useNavigate } from "react-router-dom"
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify'
 import { loginUserFn } from '../../../features/api/api';
@@ -50,11 +49,6 @@ const LoginForm = () => {
                 setRequestLoading(false);
                 login(user, token)
                 toast.success("Successfully logged in", { position: "top-center", autoClose: 800 })
-                //     navigate('/dashboard')
-                /*      const timeout = setTimeout(() => {
-                    navigate('/dashboard')
-                }, 3400);
-                clearTimeout(timeout);*/
             },
             onError(error: any) {
                 setRequestLoading(false);
@@ -85,7 +79,7 @@ const LoginForm = () => {
                     </Box>
                     <Box mt="25px">
                         <TextField
-                            label='Mot de passe'
+                            label='Password'
                             fullWidth
                             required
                             type='password'
@@ -118,7 +112,7 @@ const LoginForm = () => {
                             },
                         }}
                     >
-                        Se connecter
+                        Login
                     </LoadingButton>
                 </Box>
 

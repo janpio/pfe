@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getQuestions, saveResponse, addQuestion, deleteQuestion } from "./chatbot.controllers";
-import { authMiddleware } from "../auth.middleware";
+import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
