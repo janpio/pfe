@@ -41,7 +41,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
 
     const token = useStore((state: any) => state.token)
     const teammate = useStore((state: any) => state.teammate)
-    const { name, id } = useStore((state: any) => state.user)
+    const { name, role } = useStore((state: any) => state.user)
     const setRequestLoading = useStore((state: any) => state.setRequestLoading)
     const requestLoading = useStore((state: any) => state.requestLoading)
     const { data: activities } = useQuery<Activity[]>('activity', () => getActivities(token));

@@ -30,7 +30,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
               </div>)
               : <div className="container">
                 <div>
-                  {user.name != name && <button
+                  {user.name != name && user.role === "USER" && <button
                     id="inviteBtn" style={{
                       position: 'absolute',
                       top: '40px',
