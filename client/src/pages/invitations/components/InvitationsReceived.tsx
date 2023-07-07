@@ -45,8 +45,8 @@ const InvitationsReceived: React.FC<any> = () => {
     const handleDecline = (invitationId: number) => {
         ChangeStatus([invitationId, 'DECLINED'])
     };
-    if (!invisReceived) return <></>;
     if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />;
+    if (!invisReceived) return <></>;
     return (
         <>
             {invisReceived && invisReceived?.map((inv: any) =>

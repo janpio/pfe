@@ -13,30 +13,32 @@ import InvitationForm from "./InvitationForm";
 
 
 type OrganizationalChartProps = {
-  data: Node[] | undefined;
+  data: Node[] | any;
 }
 const chart = new OrgChart();
+
 
 const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
 
   const user = useStore((state: any) => state.user)
   const setTeammate = useStore((state: any) => state.setTeammate)
+  console.log(data)
+
 
   const [showForm, setShowForm] = useState(false);
   //const [parentNodeId, setParentNodeId] = useState<string | number>("");
   // const [supervisor, setSupervisor] = useState("");
 
   /*  const handleNodeClick = (node: Node) => {
-      setParentNodeId(node.id);
-      setSupervisor(node.name)
-      setShowForm(true);
+    setParentNodeId(node.id);
+    setSupervisor(node.name)
+    setShowForm(true);
     };*/
 
   const handleInvite = (node: Node) => {
     setTeammate(node);
     setShowForm(true);
   };
-
   /*const handleFullScreen = () => {
     chart.fullscreen();
     chart.setCentered(myNode.id);
@@ -47,20 +49,27 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
   const myNode = getNodeByEmail(data, email)
 
   useEffect(() => {
-    let teammates = getTeammatesNodes(data, myNode?.parentId)
-    teammates = teammates.filter((teammate: any) => teammate.name !== user.name)
+    let teammates = []
+    if (user.isSupervisor) {
+      teammates = data?.filter((d: any) => d.parentId == myNode.id)
+    }
+    else {
+      const supervisorNode = data?.filter((d: any) => d.id == myNode?.parentId)
+      teammates = getTeammatesNodes(data, myNode?.parentId)
+      teammates = teammates.filter((teammate: any) => teammate?.name !== user?.name)
+      teammates = [...teammates, supervisorNode[0]]
+    }
     localStorage.setItem('teammates', JSON.stringify(teammates))
   }, [])
 
   const d3Container = useRef<any>(null);
-
   useLayoutEffect(() => {
     let compact = 0;
     if (data && d3Container.current) {
       chart
         .container(d3Container.current)
         .data(data)
-        .nodeWidth((d: any) => d.data.position ? 830 : 620)//630
+        .nodeWidth((d: any) => d.data.position ? 830 : 620)
         .nodeHeight((d: any) => d.data.position ? 620 : d.data.name.toLowerCase().includes('team') ? 300 : 420)
         .childrenMargin((d: any) => 100)
         .siblingsMargin((d: any) => 80)
@@ -76,7 +85,6 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
           const inviteButton = currentNode.select('#inviteBtn');
           inviteButton.on('click', () => {
             handleInvite(d.data as Node)
-            //   console.log(d.data)
           })
         })
         .linkUpdate(function (this: HTMLElement, d, i, arr) {

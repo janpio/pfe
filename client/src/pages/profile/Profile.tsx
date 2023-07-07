@@ -1,10 +1,10 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import { Grid, Box, TextField, CardContent, Button, Card } from '@mui/material'
+import { useState, ChangeEvent } from 'react'
+import { Grid, Box, TextField, CardContent, Card } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useStore } from '../../state/store'
 import PageContainer from '../../components/container/PageContainer'
 import { changeProfilPhoto } from '../../features/api/api'
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
 import axios from 'axios'
@@ -16,9 +16,6 @@ const ImgStyled = styled('img')(({ theme }) => ({
     border: "5px solid #4ace3c",
     borderRadius: "50%"
 }))
-
-
-
 
 const Profile = () => {
 

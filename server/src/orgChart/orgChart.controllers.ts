@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
-import bcrypt from 'bcryptjs';
-import { Employee } from "@prisma/client";
 
 export const getOrgChart = async (req: Request, res: Response) => {
     try {
@@ -18,7 +16,7 @@ export const getOrgChart = async (req: Request, res: Response) => {
                                         supervisor: {
                                             select: {
                                                 id: true, name: true, email: true, role: true, teamId: true, image: true, position: true,
-                                                employees: {
+                                                supervisedEmployees: {
                                                     select: { id: true, name: true, email: true, role: true, image: true, position: true, response: true, supervisor: { select: { name: true } } },
                                                 }
                                             }
@@ -38,8 +36,20 @@ export const getOrgChart = async (req: Request, res: Response) => {
     }
 
 };
+//       supervisor: {
+// select: {
+//   id: true, name: true, email: true, role: true, teamId: true, image: true, position: true,
+// employees: {
+//   select: { id: true, name: true, email: true, role: true, image: true, position: true, response: true, supervisor: { select: { name: true } } },
+// }
+// }
+//}
 
-export const addEmployee = async (req: Request, res: Response) => {
+
+
+
+
+/*export const addEmployee = async (req: Request, res: Response) => {
     const { name, email, password, position, image, supervisor } = req.body;
     try {
 
@@ -75,4 +85,4 @@ export const addEmployee = async (req: Request, res: Response) => {
     }
 
 
-};
+};*/

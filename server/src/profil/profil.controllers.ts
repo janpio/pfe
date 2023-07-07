@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Employee, Supervisor } from '@prisma/client';
 import prisma from "../../prisma/client";
 
 export const ChangeProfilePhoto = async (req: Request, res: Response) => {
@@ -7,34 +6,17 @@ export const ChangeProfilePhoto = async (req: Request, res: Response) => {
     const { image } = req.body;
 
     try {
-        let user: Employee | Supervisor | null = null;
 
-        const employee = await prisma.employee.findUnique({
+        const updatedEmployee = await prisma.employee.update({
             where: {
                 id: Number(id),
-            }
+            },
+            data: {
+                image
+            },
         })
-        if (employee) {
-            user = await prisma.employee.update({
-                where: {
-                    id: Number(id),
-                },
-                data: {
-                    image
-                },
-            })
-        } else {
-            user = await prisma.supervisor.update({
-                where: {
-                    id: Number(id),
-                },
-                data: {
-                    image
-                },
-            })
-        }
 
-        res.status(200).json(user);
+        res.status(200).json(updatedEmployee);
 
     } catch (err: any) {
 

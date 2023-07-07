@@ -12,49 +12,37 @@ datasource db {
 model Employee {
   id                         Int                  @id @default(autoincrement())
   name                       String
-  supervisorId               Int?
   deskId                     Int?                 @unique
-  image                      String?
   email                      String?              @unique
   password                   String?              @default("")
-  createdAt                  DateTime             @default(now())
   position                   String?
-  updatedAt                  DateTime             @default(now()) @updatedAt
   role                       Role                 @default(USER)
   phone                      Int                  @default(12345678)
+  isSupervisor               Boolean              @default(false)
+  supervisorId               Int?
+  supervisor                 Employee?            @relation("SupervisedEmployees", fields: [supervisorId], references: [id])
+  supervisedEmployees        Employee[]           @relation("SupervisedEmployees")
   ActivityInvitationReceived ActivityInvitation[] @relation("InvitationsReceived")
   ActivityInvitationSent     ActivityInvitation[] @relation("InvitationsSent")
-  desk                       Desk?                @relation(fields: [deskId], references: [id])
-  supervisor                 Supervisor?          @relation(fields: [supervisorId], references: [id])
   response                   Response[]
-}
-
-model Supervisor {
-  id        Int        @id @default(autoincrement())
-  name      String?
-  teamId    Int?
-  image     String?
-  email     String?    @unique
-  password  String?
-  phone     Int        @default(12345678)
-  createdAt DateTime   @default(now())
-  position  String?
-  updatedAt DateTime   @updatedAt
-  role      Role       @default(USER)
-  employees Employee[]
-  Team      Team?      @relation(fields: [teamId], references: [id])
+  desk                       Desk?                @relation(fields: [deskId], references: [id])
+  image                      String?
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @default(now()) @updatedAt
+  Team                       Team?                @relation(fields: [teamId], references: [id])
+  teamId                     Int?
 }
 
 model Team {
-  id         Int          @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   name       String
   roomId     Int?
   stageId    Int?
   image      String?
   product    String?
-  supervisor Supervisor[]
-  Room       Room?        @relation(fields: [roomId], references: [id])
-  Stage      Stage?       @relation(fields: [stageId], references: [id])
+  supervisor Employee[]
+  Room       Room?      @relation(fields: [roomId], references: [id])
+  Stage      Stage?     @relation(fields: [stageId], references: [id])
 }
 
 model Building {

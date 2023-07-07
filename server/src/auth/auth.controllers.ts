@@ -3,7 +3,7 @@ import prisma from '../../prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { excludeField } from './utils';
-import { Employee, Supervisor } from '@prisma/client';
+import { Employee } from '@prisma/client';
 
 export const Register = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
@@ -40,37 +40,25 @@ export const Register = async (req: Request, res: Response) => {
 export const Login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
-        const supervisor: Supervisor | null = await prisma.supervisor.findUnique({
-            where: {
-                email
-            },
-        })
-
-        const employee: Employee | null = await prisma.employee.findUnique({
+        const employee = await prisma.employee.findUnique({
             where: {
                 email
             },
             include: {
-                supervisor: { include: { Team: true } },
+                Team: { select: { name: true } },
+                supervisor: { select: { Team: { select: { name: true } }, name: true } },
                 response: true,
                 ActivityInvitationReceived: { include: { sender: true } },
                 ActivityInvitationSent: true
             }
         })
-        let user: Employee | Supervisor | null = null;
 
-        if (supervisor) {
-            user = supervisor;
-        } else if (employee) {
-            user = employee;
-        }
-
-        if (!user || !(await bcrypt.compare(password, user.password as string))) {
+        if (!employee || !(await bcrypt.compare(password, employee.password as string))) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
-        const token = jwt.sign(user, 'splash_secret', { expiresIn: '2d' });
+        const token = jwt.sign(employee, 'splash_secret', { expiresIn: '2d' });
 
-        const userWithoutPassword = excludeField(user, ['password'] as never)
+        const userWithoutPassword = excludeField(employee, ['password'] as never)
 
         res.status(200).json({ token, user: userWithoutPassword });
 

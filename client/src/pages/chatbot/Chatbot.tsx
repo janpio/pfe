@@ -33,7 +33,6 @@ const Chatbot = () => {
 
     const { data: questions, isLoading } = useQuery<Question[]>('chatbot', () => getQuestions(token), {
     });
-    // const questions = data?.map((qes: any) => qes.question);
 
     const { mutate: postResponse } =
         useMutation((employeeData: Response) => saveResponse(employeeData, token), {
@@ -41,8 +40,6 @@ const Chatbot = () => {
                 console.log('success')
             }
         });
-
-
     const script = [
         {
             id: "BOT/intro",
@@ -132,6 +129,44 @@ const Chatbot = () => {
             message: 'Thank you for using the chatbot. Goodbye!',
             end: true,
         },
+    ]
+    const adminScript = [
+        {
+            id: "BOT/intro",
+            message: "Salut Admin !",
+            trigger: "CHOICES/intro",
+        },
+        {
+            id: "CHOICES/intro",
+            options: [
+                { label: "Voire Questions", trigger: "BOT/first" },
+            ],
+            placeholder: 'Choisissez une option'
+        },
+        {
+            id: "BOT/first",
+            message: "Voire liste",
+            trigger: "CHOICES/liste",
+        },
+        {
+            id: "CHOICES/liste",
+            placeholder: "Liste Questions",
+            component:
+                <QuestionsList />,
+            trigger: "BOT/finConversation"
+        },
+        {
+            id: 'BOT/finConversation',
+            placeholder: "Choisissez un option",
+            options: [
+                { label: 'Finir la conversation', trigger: 'BOT/end' },
+            ]
+        },
+        {
+            id: 'BOT/end',
+            message: "Merci d'avoir utilisé le chatbot. Au revoir!",
+            end: true,
+        }
     ]
 
     const buildSteps = (questions: any) => {
@@ -273,7 +308,7 @@ const Chatbot = () => {
                 floatingStyle={{ background: '#4ace3c' }}
                 bubbleStyle={{ lineHeight: '20px', width: 'auto' }}
                 bubbleOptionStyle={{ backgroundColor: "#4ace3c", color: "white", width: 'auto' }}
-                steps={stepifyScript(steps)}
+                steps={stepifyScript(user.role == "ADMIN" ? adminScript : steps)}
                 width={"400px"}
                 height={"600px"}
                 userAvatar={user?.image}

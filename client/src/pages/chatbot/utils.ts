@@ -8,7 +8,7 @@ export const getQuestionResponse = (teammate: string, questionAsked: string, que
     const responses = question?.flatMap((qes: any) => qes.response);
 
     const teammateResponseObject = responses?.find((res: any) =>
-        res.Employee.name === teammate);
+        res.Employee?.name === teammate);
 
     return teammateResponseObject?.response
 }

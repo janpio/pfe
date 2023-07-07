@@ -20,8 +20,8 @@ const InvitationsSent: React.FC<any> = () => {
     const { data: invisSent, isLoading } = useQuery('invisSent', () =>
         getInvitationsSent(id, token))
 
-    if (!invisSent) return <></>;
     if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />;
+    if (!invisSent) return <></>;
 
     return (
         <>
