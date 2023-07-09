@@ -31,7 +31,7 @@ const InvitationsReceived: React.FC<any> = () => {
     const queryClient = useQueryClient()
 
     const { data: invisReceived, isLoading } = useQuery('invisReceived', () =>
-        getInvitationsReceived(id, token))
+        getInvitationsReceived(id, token),{retry: 2})
 
     const { mutate: ChangeStatus, isLoading: statusLoading } =
         useMutation(([invitationId, status]: [invitationId: number, status: string]) =>
