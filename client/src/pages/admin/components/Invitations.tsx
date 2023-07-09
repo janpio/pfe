@@ -98,10 +98,12 @@ const Invitation: React.FC<any> = () => {
                     </CardContent>
                 </Card >)
             }
-            {NbPage != 1 && <Pagination color='primary'
-                count={NbPage}
-                page={current}
-                onChange={handleChangePage} />}
+            {!allInvitations &&
+                (NbPage != 1 && <Pagination color='primary'
+                    count={NbPage}
+                    page={current}
+                    onChange={handleChangePage} />)
+            }
         </>
     );
 

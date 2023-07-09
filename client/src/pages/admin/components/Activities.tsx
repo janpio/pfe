@@ -175,10 +175,12 @@ const Activities: React.FC<any> = () => {
                     </Card>
                 )
                 }
-                {NbPage != 1 && <Pagination color='primary'
-                    count={NbPage}
-                    page={current}
-                    onChange={handleChangePage} />}
+                {!activities &&
+                    (NbPage != 1 && <Pagination color='primary'
+                        count={NbPage}
+                        page={current}
+                        onChange={handleChangePage} />)
+                }
 
                 <Dialog PaperProps={{
                     sx: {
