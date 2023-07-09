@@ -31,7 +31,7 @@ const InvitationsReceived: React.FC<any> = () => {
     const queryClient = useQueryClient()
 
     const { data: invisReceived, isLoading } = useQuery('invisReceived', () =>
-        getInvitationsReceived(id, token),{retry: 2})
+        getInvitationsReceived(id, token), { retry: 2 })
 
     const { mutate: ChangeStatus, isLoading: statusLoading } =
         useMutation(([invitationId, status]: [invitationId: number, status: string]) =>
@@ -179,11 +179,11 @@ const InvitationsReceived: React.FC<any> = () => {
                     </CardContent>
                 </Card >)
             }
-            {
-                NbPage != 1 && <Pagination color='primary'
+            {!invisReceived &&
+                (NbPage != 1 && <Pagination color='primary'
                     count={NbPage}
                     page={current}
-                    onChange={handleChangePage} />
+                    onChange={handleChangePage} />)
             }
         </>
     );
