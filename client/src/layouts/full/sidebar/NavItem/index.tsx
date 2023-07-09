@@ -34,9 +34,9 @@ const NavItem: FC<NavItemProps> = ({ item, pathDirect }) => {
 
   return (
     <List component="li" disablePadding key={item.id}>
-      <StyledBadge invisible={item.title != "Invitations"}
+      <StyledBadge invisible={item?.title != "Invitations"}
         showZero={false}
-        badgeContent={item?.title === "Invitations" && user?.ActivityInvitationReceived.length}
+        badgeContent={item?.title === "Invitations" && user?.ActivityInvitationReceived?.length}
         color="error">
         <ListItem
           button

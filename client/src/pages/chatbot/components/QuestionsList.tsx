@@ -14,6 +14,8 @@ export default function QuestionsList({ triggerNextStep }: any) {
 
     const token = useStore((state: any) => state.token)
     const teammate = useStore((state: any) => state.teammate)
+    const { role } = useStore((state: any) => state.user)
+
 
     const { data: questions } = useQuery<Question[]>('chatbot', () => getQuestions(token), {
 
@@ -46,10 +48,10 @@ export default function QuestionsList({ triggerNextStep }: any) {
                     onChange={handleChange}>
                     {questions?.map((question) =>
                         <MenuItem key={question.id} value={question.abreviation}>
-                            {question.abreviation} ?
+                            {role == "ADMIN" ? question.question : question.abreviation} ?
                         </MenuItem>)}
                 </Select>
-                <Button
+                {role == "USER" && <Button
                     variant="contained"
                     size="small"
                     onClick={() => triggerNextStep({ value: response, trigger: 'BOT/response' })}
@@ -61,7 +63,7 @@ export default function QuestionsList({ triggerNextStep }: any) {
                     }}
                 >
                     Affiche réponse
-                </Button>
+                </Button>}
             </FormControl>
         </div>
     );

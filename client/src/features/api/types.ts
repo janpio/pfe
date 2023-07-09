@@ -7,7 +7,6 @@ export type GenericResponse = {
 }
 
 export type Response = {
-
     id?: number | string,
     response?: string
     questionId?: string | number,

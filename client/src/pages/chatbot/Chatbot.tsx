@@ -1,5 +1,5 @@
 import ChatBot from "react-simple-chatbot"
-import { stepifyScript } from "./Step";
+import { stepifyScript } from "./utils";
 import { useState } from "react";
 import NamesList from "./components/NamesList";
 import QuestionsList from "./components/QuestionsList";
@@ -9,13 +9,13 @@ import { getQuestions, saveResponse } from "../../features/api/api";
 import { Question, Response } from "../../features/api/types";
 import { ThemeProvider } from 'styled-components';
 import Icon from "./components/Icon";
+import FIS_icon from '/src/assets/images/logos/FIS_icon.png';
 import Header from "./components/Header";
-
 
 
 const Chatbot = () => {
 
-    const theme = {
+    const theme = {         //chatbtor theme
         background: '#f5f8fb',
         fontFamily: 'Helvetica Neue',
         headerFontColor: '#fff',
@@ -33,7 +33,6 @@ const Chatbot = () => {
 
     const { data: questions, isLoading } = useQuery<Question[]>('chatbot', () => getQuestions(token), {
     });
-    // const questions = data?.map((qes: any) => qes.question);
 
     const { mutate: postResponse } =
         useMutation((employeeData: Response) => saveResponse(employeeData, token), {
@@ -41,8 +40,6 @@ const Chatbot = () => {
                 console.log('success')
             }
         });
-
-
     const script = [
         {
             id: "BOT/intro",
@@ -132,6 +129,44 @@ const Chatbot = () => {
             message: 'Thank you for using the chatbot. Goodbye!',
             end: true,
         },
+    ]
+    const adminScript = [
+        {
+            id: "BOT/intro",
+            message: "Salut Admin !",
+            trigger: "CHOICES/intro",
+        },
+        {
+            id: "CHOICES/intro",
+            options: [
+                { label: "Voire Questions", trigger: "BOT/first" },
+            ],
+            placeholder: 'Choisissez une option'
+        },
+        {
+            id: "BOT/first",
+            message: "Voire liste",
+            trigger: "CHOICES/liste",
+        },
+        {
+            id: "CHOICES/liste",
+            placeholder: "Liste Questions",
+            component:
+                <QuestionsList />,
+            trigger: "BOT/finConversation"
+        },
+        {
+            id: 'BOT/finConversation',
+            placeholder: "Choisissez un option",
+            options: [
+                { label: 'Finir la conversation', trigger: 'BOT/end' },
+            ]
+        },
+        {
+            id: 'BOT/end',
+            message: "Merci d'avoir utilisé le chatbot. Au revoir!",
+            end: true,
+        }
     ]
 
     const buildSteps = (questions: any) => {
@@ -273,11 +308,11 @@ const Chatbot = () => {
                 floatingStyle={{ background: '#4ace3c' }}
                 bubbleStyle={{ lineHeight: '20px', width: 'auto' }}
                 bubbleOptionStyle={{ backgroundColor: "#4ace3c", color: "white", width: 'auto' }}
-                steps={stepifyScript(steps)}
+                steps={stepifyScript(user.role == "ADMIN" ? adminScript : steps)}
                 width={"400px"}
-                height={"600px"}
+                height={"500px"}
                 userAvatar={user?.image}
-                botAvatar={"https://play-lh.googleusercontent.com/sIPvD23PRhSQjuqLFUtZg5g92sO851MRsSon3N3k6fDlCtzgLi1lTPvXOUAXxG5gHg=w240-h480-rw"}
+                botAvatar={FIS_icon}
             />
         </ThemeProvider>
 

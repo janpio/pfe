@@ -26,8 +26,8 @@ export default function NamesList({ triggerNextStep }: any) {
                     value={teammate || ""}
                     label="employés"
                     onChange={handleChange}>
-                    {teammates.map((item: any) =>
-                        <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
+                    {teammates?.map((item: any) =>
+                        <MenuItem value={item?.name} key={item?.id}>{item?.name}</MenuItem>
                     )}
                 </Select>
                 <Button

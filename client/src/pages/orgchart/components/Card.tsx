@@ -22,7 +22,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
               <img src={imageUrl} alt="salle img" />
             </div>)
 
-            : name.toLowerCase().includes("equipe") ?
+            : name.toLowerCase().includes("team") ?
               (<div className="equipeContainer">
                 <h1 className="name"  >
                   {name}
@@ -30,7 +30,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
               </div>)
               : <div className="container">
                 <div>
-                  {user.name != name && <button
+                  {user.name != name && user.role === "USER" && <button
                     id="inviteBtn" style={{
                       position: 'absolute',
                       top: '40px',
@@ -43,7 +43,7 @@ const Card: FC<any> = ({ data: { name, imageUrl, position, team, _directSubordin
                       fontSize: '40px',
                       cursor: 'pointer',
                     }}>
-                    Inviter
+                    Invite
                   </button>}
                   <img src={imageUrl} className="avatar" alt="avatar" />:
                   {_directSubordinates ? <div className="badge">{_directSubordinates}</div> : null}

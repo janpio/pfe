@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-    Card, CardContent, Typography,
-    Button, Box, Grid, Dialog, DialogTitle,
-    DialogContent, DialogActions, TextField, Chip, IconButton
+    Card, CardContent, Typography, IconButton,
+    Button, Box, Grid, Dialog, DialogTitle, CircularProgress,
+    DialogContent, DialogActions, TextField, Chip, Pagination
 } from '@mui/material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { addQuestion, deleteQuestion, getQuestions } from '../../../features/api/api';
@@ -14,22 +14,24 @@ import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify'
 import { Question } from '../../../features/api/types';
+import SkeletonList from '../../../components/shared/SkeletonList';
 
 
 const QuestionSchema = object({
-    question: string().nonempty('Champ requis !'),
+    question: string().nonempty('Required !'),
 })
 export type QuestionInput = TypeOf<typeof QuestionSchema>;
 
 const Activities: React.FC<any> = () => {
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
-    const token = useStore((state: any) => state.token)
-    const setRequestLoading = useStore((state: any) => state.setRequestLoading)
-    const requestLoading = useStore((state: any) => state.requestLoading)
+    const token = useStore((state: any) => state.token);
+    const setRequestLoading = useStore((state: any) => state.setRequestLoading);
+    const requestLoading = useStore((state: any) => state.requestLoading);
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [clickedItem, SetClickItem] = useState(null)
 
     const {
         register,
@@ -41,37 +43,59 @@ const Activities: React.FC<any> = () => {
 
     });
 
-    const { data: questions } = useQuery('questions', () =>
+    //get all questions
+    const { data: questions, isLoading } = useQuery('questions', () =>
         getQuestions(token))
 
-    const { mutate: delQuestion } =
+    //delete question
+    const { mutate: delQuestion, isLoading: deleteLoading } =
         useMutation((id: number) =>
             deleteQuestion(id, token), {
             onSuccess: () => {
-                queryClient.invalidateQueries('questions')
-                toast.success("Question supprimé avec succés", { position: "bottom-center", autoClose: 800 })
+                queryClient.invalidateQueries('questions');
+                toast.success("Question deleted  successfully", { position: "bottom-center", autoClose: 800 });
+
             }
 
         });
 
+    //add question
     const { mutate: addQues } =
         useMutation((question: string) =>
             addQuestion(question, token), {
+            onMutate: () => {
+                setRequestLoading(true)
+            },
             onSuccess: () => {
-                queryClient.invalidateQueries('questions')
-                toast.success("Question ajoute avec succés", { position: "bottom-center", autoClose: 800 })
-                reset()
-                setRequestLoading(false)
-                setOpen(false)
+                queryClient.invalidateQueries('questions');
+                toast.success("Question added  successfully", { position: "bottom-center", autoClose: 800 });
+                reset();
+                setRequestLoading(false);
+                setOpen(false);
             }
         });
 
     const onSubmitHandler: SubmitHandler<QuestionInput> = async (values) => {
-        addQues(values.question)
+        addQues(values.question);
     };
+
+    //pagination 
+    const items = 4;
+    const [current, setCurrent] = useState(1);
+    const NbPage = Math.ceil(questions?.length / items);
+
+    const startIndex = (current - 1) * items;
+    const endIndex = startIndex + items;
+
+    const DataPerPage = questions?.slice(startIndex, endIndex);
+    const handleChangePage = (e: any, page: any) => {
+        setCurrent(page)
+    }
+
+
     return (
         <>
-            {<Button component='label' variant='contained' htmlFor='add-activity'
+            <Button component='label' variant='contained' htmlFor='add-activity'
                 onClick={() => setOpen(!open)}
                 startIcon={<IconPlus />}
                 sx={{
@@ -82,10 +106,13 @@ const Activities: React.FC<any> = () => {
                         color: '#4ace3c',
                     },
                 }}>
-                Ajouter
+                Add
 
-            </Button>}
-            {questions?.map((question: Question) =>
+            </Button>
+
+            {isLoading && <SkeletonList rowsNum={4} h={80} />}
+
+            {DataPerPage?.map((question: Question) =>
                 <Card key={question.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }} >
                         <Box display={"flex"} gap={2} alignItems={'center'}>
@@ -94,12 +121,21 @@ const Activities: React.FC<any> = () => {
                                 {question.question} ?
                             </Typography>
                         </Box>
-                        <IconButton color='error' onClick={() => delQuestion(question.id)}>
-                            <IconTrashXFilled />
-                        </IconButton>
+                        <IconButton color='error' onClick={() => {
+                            delQuestion(question.id)
+                            SetClickItem(question.id)
+                        }}>
+                            {deleteLoading && question.id == clickedItem
+                                ? <CircularProgress size={30} color='error' />
+                                : <IconTrashXFilled />}</IconButton>
                     </CardContent>
                 </Card >)
             }
+            {NbPage != 1 && <Pagination color='primary'
+                count={NbPage}
+                page={current}
+                onChange={handleChangePage} />}
+
             <Dialog PaperProps={{
                 sx: {
                     width: "100%",
@@ -110,7 +146,7 @@ const Activities: React.FC<any> = () => {
                     setOpen(false)
                     reset();
                 }} >
-                <DialogTitle>Ajouter une question pour le Chatbot</DialogTitle>
+                <DialogTitle>Add a question for the Chatbot</DialogTitle>
                 <DialogContent >
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
                         <Grid container direction="column" spacing={2} >
@@ -130,7 +166,7 @@ const Activities: React.FC<any> = () => {
                                     <Button onClick={() => {
                                         setOpen(false)
                                         reset()
-                                    }}>Annuler</Button>
+                                    }}>Cancel</Button>
                                     <LoadingButton
                                         variant="contained"
                                         size="large"
@@ -143,14 +179,13 @@ const Activities: React.FC<any> = () => {
                                             },
                                         }}
                                     >
-                                        Ajouter
+                                        Add
                                     </LoadingButton>
                                 </DialogActions>
                             </Grid>
                         </Grid>
                     </form>
                 </DialogContent>
-
             </Dialog>
         </>
     );

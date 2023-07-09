@@ -7,7 +7,7 @@ import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
 
 
-const BASE_URL = 'https://pfe-five.vercel.app/api/';
+const BASE_URL = 'http://localhost:3001/api/';
 
 export const api = axios.create({
     baseURL: BASE_URL,
@@ -38,7 +38,7 @@ export const addEmployee = async (employee: EmployeeInput, token: string | null)
 
 // chatbot
 export const getQuestions = async (token: string) => {
-    const response = await api.get<Question[]>('chatbot', { headers: { "Authorization": `Bearer ${token}` } })
+    const response = await api.get<Question[] | any>('chatbot', { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }
@@ -64,7 +64,7 @@ export const saveResponse = async (employeeData: Response, token: string) => {
 // activity ,invitations
 
 export const getActivities = async (token: string) => {
-    const response = await api.get<Activity[]>('activity', { headers: { "Authorization": `Bearer ${token}` } })
+    const response = await api.get<Activity[] | any>('activity', { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }
@@ -86,7 +86,7 @@ export const sendInvitation = async (invitation: Invitation, token: string) => {
     return data
 }
 export const getAllInvitations = async (token: string) => {
-    const response = await api.get<Invitation[]>('activity/getAllInvitations'
+    const response = await api.get<Invitation[] | any>('activity/getAllInvitations'
         , {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -96,13 +96,13 @@ export const getAllInvitations = async (token: string) => {
     return data
 }
 export const getInvitationsSent = async (employeeId: number | string, token: string) => {
-    const response = await api.get<Invitation[]>(`activity/getInvitationsSent/${employeeId}`
+    const response = await api.get<Invitation[] | any>(`activity/getInvitationsSent/${employeeId}`
         , { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }
 export const getInvitationsReceived = async (employeeId: number | string, token: string) => {
-    const response = await api.get<Invitation[]>(`activity/getInvitationsReceived/${employeeId}`,
+    const response = await api.get<Invitation[] | any>(`activity/getInvitationsReceived/${employeeId}`,
         { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
@@ -116,6 +116,20 @@ export const changeInvitationStatus = async (invitationId: number, status: strin
 export const changeHasRead = async (invitationId: number, hasRead: boolean, token: string) => {
     const response = await api.patch<Invitation>(`activity/changeHasRead/${invitationId}`,
         { hasRead }, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+
+export const deleteInvitation = async (id: number, token: string) => {
+    const response = await api.delete<Invitation>(`activity/deleteInvitation/${id}`, { headers: { "Authorization": `Bearer ${token}` } })
+    const data = await response.data
+    return data
+}
+
+//profil
+export const changeProfilPhoto = async (employeeId: number | string, photo: string, token: string) => {
+    const response = await api.patch<any>(`/profil/ChangeProfilePhoto/${employeeId}`,
+        { image: photo }, { headers: { "Authorization": `Bearer ${token}` } })
     const data = await response.data
     return data
 }

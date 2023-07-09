@@ -1,9 +1,9 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { Box, Tab } from "@mui/material";
 import { TabPanel, TabList, TabContext } from "@mui/lab";
 import { IconMessage2Question } from '@tabler/icons-react';
 import ConnectWithoutContactOutlinedIcon from '@mui/icons-material/ConnectWithoutContactOutlined';
-import CallReceivedIcon from '@mui/icons-material/CallReceived';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import Activities from "./components/Activities";
 import Invitations from "./components/Invitations";
 import Questions from "./components/Questions";
@@ -17,7 +17,7 @@ const Admin = () => {
 
     return (
         <>
-            <PageContainer title="admin" description="this is the admin dashboard">
+            <PageContainer title="Admin Dashboard" description="Admin dashboard">
                 <Box marginTop={-2}>
                     <TabContext value={value}>
                         <Box sx={{
@@ -28,12 +28,12 @@ const Admin = () => {
                                 <TabList
                                     onChange={handleChange}>
                                     <Tab
-                                        icon={<CallReceivedIcon />}
-                                        label="Activités" value="1" />
+                                        icon={<SportsEsportsIcon />}
+                                        label="Activities" value="1" />
                                     <Tab icon={<IconMessage2Question />}
-                                        label="Questions de Chatbot" value="2" />
+                                        label="Chatbot Questions" value="2" />
                                     <Tab icon={<ConnectWithoutContactOutlinedIcon />}
-                                        label="Toutes les invitations des activités" value="3" />
+                                        label="All activity invitations" value="3" />
                                 </TabList>
                             </Box>
 

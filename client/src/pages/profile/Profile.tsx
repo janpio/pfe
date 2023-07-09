@@ -1,14 +1,13 @@
-// ** React Imports
 import { useState, ChangeEvent } from 'react'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import { Grid, Box, TextField, CardContent, Card } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import TextField from '@mui/material/TextField'
-import CardContent from '@mui/material/CardContent'
-import Button from '@mui/material/Button'
-import { Card } from '@mui/material'
 import { useStore } from '../../state/store'
 import PageContainer from '../../components/container/PageContainer'
+import { changeProfilPhoto } from '../../features/api/api'
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify'
+import { LoadingButton } from '@mui/lab'
+import axios from 'axios'
 
 const ImgStyled = styled('img')(({ theme }) => ({
     width: 120,
@@ -18,25 +17,47 @@ const ImgStyled = styled('img')(({ theme }) => ({
     borderRadius: "50%"
 }))
 
-
 const Profile = () => {
 
     const user = useStore((state: any) => state?.user)
-    console.log(user)
-    const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
+    const login = useStore((state: any) => state?.login)
+    const token = useStore((state: any) => state?.token)
+    const setRequestLoading = useStore((state: any) => state?.setRequestLoading);
+    const requestLoading = useStore((state: any) => state?.requestLoading);
 
-    const onChange = (file: ChangeEvent) => {
-        const reader = new FileReader()
-        const { files } = file.target as HTMLInputElement
-        if (files && files.length !== 0) {
-            reader.onload = () => setImgSrc(reader.result as string)
+    const [file, setFile] = useState<File | undefined>(undefined)
+    const [photo, setPhoto] = useState<string>("")
 
-            reader.readAsDataURL(files[0])
-        }
-    }
+    const { mutate: changePhoto } =
+        useMutation((photo: string) =>
+            changeProfilPhoto(user.id, photo, token), {
+            onMutate: () =>
+                setRequestLoading(true),
+            onSuccess: () => {
+                setRequestLoading(false),
+                    toast.success("Photo changed successfully", { position: "bottom-center", autoClose: 800 });
+            }
+
+        });
+    const ChangeProfilePhoto = async () => {
+        const form = new FormData();
+        setRequestLoading(true);
+        form.append("file", file as any);
+        form.append("upload_preset", "splash");
+        const response = await axios.post("https://api.cloudinary.com/v1_1/dsjjqkvf1/upload", form);
+        const imageLink = await response.data.secure_url;
+        changePhoto(imageLink);
+        let user = localStorage.getItem("user");
+        let userData = JSON.parse(user as any);
+        userData.user.image = imageLink;
+        login(userData.user, token);
+        let updatedUser = JSON.stringify(userData);
+        localStorage.setItem("user", updatedUser);
+
+    };
 
     return (
-        <PageContainer title="profile" description="profile page">
+        <PageContainer title="Profile" description="profile page">
             <Card variant='outlined' sx={{
                 borderRadius: 7,
                 boxShadow: 10,
@@ -47,32 +68,36 @@ const Profile = () => {
                         <Grid container spacing={5}>
                             <Grid item xs={12} sx={{ marginTop: 2 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <ImgStyled src={user.image} alt='Profile Pic' />
+                                    <ImgStyled src={photo ? photo : user.image} alt='Profile photo' />
                                     <Box>
-                                        <Button component='label' variant='contained' htmlFor='account-settings-upload-image'
+                                        <LoadingButton component='label' variant='contained' htmlFor='profil-photo'
+                                            loading={!!photo && requestLoading}
                                             sx={{
                                                 color: 'white',
                                                 '&:hover': {
                                                     backgroundColor: '#ECF2FF',
                                                     color: '#4ace3c',
                                                 },
-                                            }}>
-                                            Changer photo
+                                            }}
+                                        >
+                                            Change photo
                                             <input
                                                 hidden
                                                 type='file'
-                                                onChange={onChange}
-                                                accept='image/png, image/jpeg'
-                                                id='account-settings-upload-image'
+                                                onChange={(e: ChangeEvent<HTMLInputElement | any>) => {
+                                                    setFile((e?.target?.files[0]));
+                                                    setPhoto(URL.createObjectURL(e.target?.files[0]));
+                                                }}
+                                                id='profil-photo'
                                             />
-                                        </Button>
+                                        </LoadingButton>
 
                                     </Box>
                                 </Box>
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-                                <TextField fullWidth label='Nom & prénom' value={user.name} />
+                                <TextField fullWidth label='Name' value={user.name} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -83,29 +108,34 @@ const Profile = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField fullWidth label='Position' value={user.position} />
+                                <TextField fullWidth label='Position' value={user?.position} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField fullWidth label='Téléphone' value={user.phone} />
+                                <TextField fullWidth label='Phone' value={user?.phone} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField fullWidth label='Equipe' value={user?.supervisor?.Team?.name} />
+                                <TextField fullWidth label='Team' value={user?.supervisor?.Team?.name || user?.Team?.name} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField fullWidth label='Superviseur' value={user?.supervisor?.name} />
+                                {!user?.teamId && <TextField fullWidth label='Supervisor' value={user?.supervisor?.name} />}
                             </Grid>
-                            {/*             <Grid item xs={12}>
-                            <Button variant='contained' sx={{
-                                mr: 3.5,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: '#ECF2FF',
-                                    color: '#4ace3c',
-                                },
-                            }}>
-                                Save Changes
-                            </Button>
-                        </Grid>*/}
+                            {<Grid item xs={12}>
+                                <LoadingButton variant='contained'
+                                    loading={!!photo && requestLoading}
+                                    sx={{
+                                        mr: 3.5,
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: '#ECF2FF',
+                                            color: '#4ace3c',
+                                        },
+                                    }}
+
+                                    onClick={ChangeProfilePhoto}
+                                >
+                                    Save Changes
+                                </LoadingButton>
+                            </Grid>}
                         </Grid>
                     </form>
                 </CardContent>

@@ -8,8 +8,23 @@ export const getQuestionResponse = (teammate: string, questionAsked: string, que
     const responses = question?.flatMap((qes: any) => qes.response);
 
     const teammateResponseObject = responses?.find((res: any) =>
-        res.Employee.name === teammate);
+        res.Employee?.name === teammate);
 
     return teammateResponseObject?.response
 }
 
+
+export const stepifyScript = (script: any) =>
+    script.map((step: any) => {
+        if (step.options) {
+            return {
+                ...step,
+                options: step.options.map((option: any, idx: any) => ({
+                    ...option,
+                    value: idx
+                }))
+            };
+        } else {
+            return step;
+        }
+    });

@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-//import LogoDark from '/src/assets/images/logos/dark-logo.svg';
-import FIS from '/src/assets/images/logos/f.jpg'
 import FisLogo from '/src/assets/images/logos/FIS.png';
 import { styled } from '@mui/material';
 

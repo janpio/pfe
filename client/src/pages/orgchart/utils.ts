@@ -44,14 +44,13 @@ export const transformData = (orgData: any) => {
                             position: supervisor.position,
                             imageUrl: supervisor.image
                         };
-                        const employeeNodes = supervisor.employees.map((employee: any) => {
+                        const employeeNodes = supervisor.supervisedEmployees.map((employee: any) => {
                             const employeeId = `${supervisorId}-${employee.id}`;
                             const employeeNode = {
                                 id: employeeId,
                                 name: employee.name,
                                 email: employee.email,
                                 parentId: supervisorId,
-
                                 position: employee.position,
                                 imageUrl: employee.image,
                                 responses: employee.response

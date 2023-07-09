@@ -3,7 +3,7 @@ import "../styles.css";
 import { FC } from 'react';
 
 
-const CustomExpandButton: FC<any> = (node) => {
+const ExpandButton: FC<any> = (node) => {
   return (
     <>
       {node && (
@@ -15,4 +15,4 @@ const CustomExpandButton: FC<any> = (node) => {
   );
 };
 
-export default CustomExpandButton;
+export default ExpandButton;

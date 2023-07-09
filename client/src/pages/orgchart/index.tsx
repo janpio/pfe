@@ -1,11 +1,11 @@
 import OrganizationalChart from './components/orgChart';
 import PageContainer from '../../components/container/PageContainer';
 import { getOrgChartData } from '../../features/api/api';
-import { CircularProgress } from '@mui/material';
 import { useQuery } from 'react-query';
 import { Node } from './types';
 import { toast } from 'react-toastify'
 import { useStore } from '../../state/store';
+import { CircularProgress } from '@mui/material';
 
 const Index = () => {
 
@@ -39,7 +39,7 @@ const Index = () => {
     if (!data) return <div>No data !!</div>;
     return (
         <>
-            <PageContainer title="orgchart" description="this is orgchart">
+            <PageContainer title="Organizational chart" description="organizational chart of the company">
                 <OrganizationalChart data={data} />
             </PageContainer>
 

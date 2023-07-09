@@ -17,23 +17,23 @@ export type MenuItemType = {
 const Menuitems: MenuItemType[] = [
   {
     navlabel: true,
-    subheader: 'Acceuil', //Home
+    subheader: 'Home',
   },
   {
     id: uniqueId(),
-    title: " Mon Profil",  //teams
+    title: " My Profil",
     icon: <IconUserCircle />,
     href: '/profile',
   },
   {
     id: uniqueId(),
-    title: "Organigramme des équipes",  //teams
+    title: "Organizational Chart",
     icon: <GroupsOutlinedIcon />,
     href: '/teams',
   },
   {
     id: uniqueId(),
-    title: "Les Invitations des activités",
+    title: "Activity Invitations",
     icon: <ConnectWithoutContactOutlinedIcon />,
     href: '/Invitations',
   },

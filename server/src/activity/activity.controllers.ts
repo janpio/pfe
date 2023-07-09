@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Employee } from '@prisma/client';
 import prisma from '../../prisma/client';
 
 export const getActivties = async (req: Request, res: Response) => {
@@ -52,6 +53,11 @@ export const sendInvitation = async (req: Request, res: Response) => {
 
     try {
 
+        const employee = await prisma.employee.findFirst({
+            where: {
+                name: sender,
+            }
+        })
         const activityChosen = await prisma.activity.findFirst({
             where: {
                 type: activity
@@ -65,7 +71,7 @@ export const sendInvitation = async (req: Request, res: Response) => {
 
         const invitation = await prisma.activityInvitation.create({
             data: {
-                senderId: sender,
+                senderId: employee?.id,
                 recipientId: teammateToInvite?.id,
                 activityId: activityChosen?.id,
                 date
@@ -78,6 +84,7 @@ export const sendInvitation = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const getAllInvitations = async (req: Request, res: Response) => {
     try {
 
@@ -94,6 +101,7 @@ export const getAllInvitations = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const getInvitationsReceived = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
     try {
@@ -179,6 +187,22 @@ export const changeHasRead = async (req: Request, res: Response) => {
             },
         })
         res.status(200).json(updatedInvitation);
+
+    } catch (err: any) {
+
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+};
+export const deleteInvitation = async (req: Request, res: Response) => {
+    const { invitationId } = req.params;
+
+    try {
+        const deletedInvitation = await prisma.activityInvitation.delete({
+            where: {
+                id: Number(invitationId),
+            },
+        })
+        res.status(200).json(deletedInvitation);
 
     } catch (err: any) {
 

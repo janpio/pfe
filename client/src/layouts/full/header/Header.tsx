@@ -72,7 +72,6 @@ const Header = (props: HeaderProps) => {
     const array = invisReceived && invisReceived?.filter((inv) => inv?.hasRead == false)
     return array
   }
-
   return (
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled>
@@ -93,21 +92,20 @@ const Header = (props: HeaderProps) => {
           size="large"
           aria-label="show notifications"
           color="inherit"
-          aria-controls="msgs-menu"
+          aria-controls="notifications"
           aria-haspopup="true"
           onClick={handleClick}
         >
           <StyledBadge
             color="error"
             badgeContent={getUnseenInvitationsNumber()?.length}
-          // invisible={seen}
           >
             <IconBellRinging size="21" stroke="1.5" />
           </StyledBadge>
 
         </IconButton>
         <Menu
-          id="msgs-menu"
+          id="notifications"
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}
@@ -124,7 +122,7 @@ const Header = (props: HeaderProps) => {
             },
           }}
         >
-          {invisReceived && invisReceived?.map((inv: any) =>
+          {invisReceived ? invisReceived?.map((inv: any) =>
             <Box display={'flex'} key={inv?.id}
               paddingRight={1.5}
               justifyContent={'space-between'}
@@ -146,7 +144,7 @@ const Header = (props: HeaderProps) => {
                   variant={inv.hasRead ? "body1" : "h6"}
                   sx={{ textDecoration: 'none', color: 'black' }}
                 >
-                  {inv.sender.name} Vous envoyez une invitation pour une activité
+                  {inv.sender.name} sent you an activity invitation
                 </Typography>
               </MenuItem>
               <IconButton onClick={() => {
@@ -156,7 +154,15 @@ const Header = (props: HeaderProps) => {
                   <VisibilityOffIcon />}
               </IconButton>
             </Box>
-          )}
+          ) :
+            <Box display={'flex'} key={"inv?.id"}>
+              <Typography
+                variant={"h6"}
+                sx={{ p: 1 }}>
+                No invitations Received
+              </Typography>
+
+            </Box>}
         </Menu>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">

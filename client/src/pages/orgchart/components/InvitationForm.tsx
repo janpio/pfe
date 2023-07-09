@@ -41,10 +41,9 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
 
     const token = useStore((state: any) => state.token)
     const teammate = useStore((state: any) => state.teammate)
-    const { name, id } = useStore((state: any) => state.user)
+    const { name, role } = useStore((state: any) => state.user)
     const setRequestLoading = useStore((state: any) => state.setRequestLoading)
     const requestLoading = useStore((state: any) => state.requestLoading)
-
     const { data: activities } = useQuery<Activity[]>('activity', () => getActivities(token));
 
     const {
@@ -77,18 +76,17 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
             }
             , onSuccess: () => {
                 setRequestLoading(false)
-                toast.success("Invitation send succesfully", { position: "bottom-center" })
+                toast.success("Invitation send succesfully", { position: "bottom-center", autoClose: 800 })
                 setTimeout(() => {
                     setShowForm(false);
                     reset();
-                }, 2000)
+                }, 1000)
             }
         });
 
     const onSubmitHandler: SubmitHandler<InvitationInput> = (values) => {
-        console.log(getValues())
         sendInvite({
-            sender: id,
+            sender: name,
             recipient: teammate.name,
             activity: values.activity,
             date: values.date,
@@ -107,7 +105,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                     setShowForm(false);
                     reset();
                 }} >
-                <DialogTitle>Inviter un collègue  à une activité</DialogTitle>
+                <DialogTitle>Invite a teammate for an activity</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleSubmit(onSubmitHandler)}>
                         <Grid container direction="column" spacing={3} >
@@ -122,7 +120,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                                 labelId="activity-select"
                                                 id="activity-select-id"
                                                 value={field.value || ""}
-                                                label="Activité"
+                                                label="Activity"
                                                 sx={{ display: 'flex' }}
                                                 onChange={field.onChange}
                                             >
@@ -144,7 +142,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                     control={control}
                                     render={({ field, fieldState: { error } }) => (
                                         <LocalizationProvider
-                                            adapterLocale="fr"
+                                            //adapterLocale="fr" if you want french months
                                             dateAdapter={AdapterDayjs}>
                                             <DateTimePicker
 
@@ -168,7 +166,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                             </Grid>
                             <Grid item>
                                 <TextField
-                                    label="Le collègue à inviter" //teammate to invite
+                                    label="Teammate to invite"
                                     value={teammate?.name || " "}
                                     fullWidth
                                     type="text"
@@ -182,7 +180,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                     <Button onClick={() => {
                                         setShowForm(false)
                                         reset()
-                                    }}>Annuler</Button>
+                                    }}>Cancel</Button>
                                     <LoadingButton
                                         variant="contained"
                                         size="large"
@@ -195,7 +193,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ showForm, setShowForm }) => {
                                             },
                                         }}
                                     >
-                                        Inviter
+                                        Invite
                                     </LoadingButton>
                                 </DialogActions>
                             </Grid>
