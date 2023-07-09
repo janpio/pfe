@@ -119,12 +119,10 @@ const InvitationsSent: React.FC<any> = () => {
                     </CardContent>
                 </Card >)
             }
-            {!invisSent &&
-                (NbPage != 1 && <Pagination color='primary'
-                    count={NbPage}
-                    page={current}
-                    onChange={handleChangePage} />)
-            }
+            {NbPage != 1 && <Pagination color='primary'
+                count={NbPage}
+                page={current}
+                onChange={handleChangePage} />}
         </>
     );
 
