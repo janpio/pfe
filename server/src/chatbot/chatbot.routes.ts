@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-//router.use(authMiddleware)
+router.use(authMiddleware)
 router.get('/', getQuestions)
 router.post('/', addQuestion)
 router.delete('/:id', deleteQuestion)

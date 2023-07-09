@@ -1,5 +1,5 @@
 export const transformData = (orgData: any) => {
-    const transformedData = orgData.map((building: any) => {
+    const transformedData = orgData?.map((building: any) => {
         const buildingNode = {
             id: building.id.toString(),
             name: building.name,

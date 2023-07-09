@@ -31,7 +31,7 @@ const Chatbot = () => {
     const user = useStore((state: any) => state.user)
     const token = useStore((state: any) => state.token)
 
-    const { data: questions, isLoading } = useQuery<Question[]>('chatbot', () => getQuestions(token), {
+    const { data: questions, isLoading } = useQuery('chatbot', () => getQuestions(token), {
     });
 
     const { mutate: postResponse } =

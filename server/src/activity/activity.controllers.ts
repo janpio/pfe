@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { Employee } from '@prisma/client';
 import prisma from '../../prisma/client';
 
 export const getActivties = async (req: Request, res: Response) => {
@@ -33,7 +32,6 @@ export const addActivity = async (req: Request, res: Response) => {
 
 export const deleteActivity = async (req: Request, res: Response) => {
     const { id } = req.params;
-
     try {
         const activity = await prisma.activity.delete({
             where: {
@@ -51,6 +49,11 @@ export const deleteActivity = async (req: Request, res: Response) => {
 export const sendInvitation = async (req: Request, res: Response) => {
     const { sender, recipient, activity, date } = req.body;
 
+    const user = req.user;
+
+    if (user.name != sender) {
+        return res.status(401).json({ error: "Unauthorized !" })
+    }
     try {
 
         const employee = await prisma.employee.findFirst({
@@ -104,6 +107,12 @@ export const getAllInvitations = async (req: Request, res: Response) => {
 
 export const getInvitationsReceived = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
+    const user = req.user;
+
+    if (user.id != Number(employeeId)) {
+        return res.status(401).json({ error: "Unauthorized !" })
+    }
+
     try {
 
         const invitationsReceived = await prisma.employee.findUnique({
@@ -130,6 +139,11 @@ export const getInvitationsReceived = async (req: Request, res: Response) => {
 
 export const getInvitationsSent = async (req: Request, res: Response) => {
     const { employeeId } = req.params;
+    const user = req.user;
+
+    if (user.id != Number(employeeId)) {
+        return res.status(401).json({ error: "Unauthorized !" })
+    }
     try {
         const invitationsSent = await prisma.employee.findUnique({
             where: {
@@ -193,10 +207,11 @@ export const changeHasRead = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 };
+
 export const deleteInvitation = async (req: Request, res: Response) => {
     const { invitationId } = req.params;
-
     try {
+
         const deletedInvitation = await prisma.activityInvitation.delete({
             where: {
                 id: Number(invitationId),

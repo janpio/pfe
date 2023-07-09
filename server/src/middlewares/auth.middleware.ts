@@ -13,7 +13,7 @@ export const authMiddleware = async (req: any, res: Response, next: NextFunction
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET as jwt.Secret);
-
+        // const { id } = decoded as JwtPayload
         req.user = decoded;
 
         next();

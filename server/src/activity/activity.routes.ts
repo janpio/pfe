@@ -11,10 +11,10 @@ import {
     changeHasRead,
     deleteInvitation
 } from "./activity.controllers";
-//import { authMiddleware } from "..//middlewares/auth.middleware";
+import { authMiddleware } from "..//middlewares/auth.middleware";
 
 const router = Router();
-//router.use(authMiddleware)
+router.use(authMiddleware)
 router.get('/', getActivties)
 router.post('/', addActivity)
 router.delete('/:id', deleteActivity)

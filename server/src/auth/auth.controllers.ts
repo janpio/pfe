@@ -22,12 +22,13 @@ export const Register = async (req: Request, res: Response) => {
                 name: name,
                 email: email,
                 password: hashedPassword,
-                role: "USER" as const
+                role: "USER"
             },
         });
-        const token = jwt.sign(newUser, process.env.SECRET as jwt.Secret, { expiresIn: '7d' });
+        const userWithoutPassword = excludeField(newUser, ['password', 'createdAt', 'updatedAt'])
 
-        const userWithoutPassword = excludeField(newUser, ['password'])
+        const token = jwt.sign(userWithoutPassword, process.env.SECRET as jwt.Secret, { expiresIn: '7d' });
+
 
         res.status(200).json({ token, user: userWithoutPassword });
 
@@ -56,9 +57,9 @@ export const Login = async (req: Request, res: Response) => {
         if (!employee || !(await bcrypt.compare(password, employee.password as string))) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
-        const token = jwt.sign(employee, process.env.SECRET as jwt.Secret, { expiresIn: '2d' });
+        const userWithoutPassword = excludeField(employee, ['password', 'createdAt', 'updatedAt'])
 
-        const userWithoutPassword = excludeField(employee, ['password'] as never)
+        const token = jwt.sign(userWithoutPassword, process.env.SECRET as jwt.Secret, { expiresIn: '2d' });
 
         res.status(200).json({ token, user: userWithoutPassword });
 
