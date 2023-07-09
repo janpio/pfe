@@ -12,6 +12,7 @@ import { useStore } from '../../../state/store';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getInvitationsReceived, changeHasRead } from '../../../features/api/api';
 import { Link } from 'react-router-dom';
+import { Invitation } from '../../../features/api/types';
 
 const AppBarStyled = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',
@@ -69,7 +70,7 @@ const Header = (props: HeaderProps) => {
   };
 
   const getUnseenInvitationsNumber = () => {
-    const array = invisReceived && invisReceived?.filter((inv) => inv?.hasRead == false)
+    const array = invisReceived && invisReceived?.filter((inv: Invitation) => inv?.hasRead == false)
     return array
   }
   return (
