@@ -7,7 +7,7 @@ import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
 
 
-const BASE_URL = 'http://pfe-five.vercel.app/api/';
+const BASE_URL = 'https://pfe-five.vercel.app/api/';
 
 export const api = axios.create({
     baseURL: BASE_URL,
