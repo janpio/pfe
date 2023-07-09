@@ -3,7 +3,7 @@ import {
     Card, CardContent, Typography,
     Button, Box, Grid, Input, FormControl, FormHelperText,
     Dialog, DialogTitle, DialogContent, DialogActions, TextField,
-    CardMedia, CardActionArea, IconButton
+    CardMedia, CardActionArea, IconButton, CircularProgress, Pagination
 } from '@mui/material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getActivities, addActivity, deleteActivity } from '../../../features/api/api';
@@ -42,6 +42,8 @@ const Activities: React.FC<any> = () => {
     const requestLoading = useStore((state: any) => state.requestLoading);
 
     const [open, setOpen] = useState(false)
+    const [clickedItem, SetClickItem] = useState(null)
+
 
     const {
         register,
@@ -59,7 +61,7 @@ const Activities: React.FC<any> = () => {
         getActivities(token));
 
     //delete activity
-    const { mutate: delActivity } =
+    const { mutate: delActivity, isLoading: delLoading } =
         useMutation((id: number) =>
             deleteActivity(id, token), {
             onSuccess: () => {
@@ -94,6 +96,22 @@ const Activities: React.FC<any> = () => {
         const imageLink = await response.data.secure_url;
         addNewActivity({ type: values.type, image: imageLink });
     };
+
+    //pagination , ill optimize this later 
+
+    //pagination 
+    const items = 4;
+    const [current, setCurrent] = useState(1);
+    const NbPage = Math.ceil(activities?.length / items);
+
+    const startIndex = (current - 1) * items;
+    const endIndex = startIndex + items;
+
+    const DataPerPage = activities?.slice(startIndex, endIndex);
+    const handleChangePage = (e: any, page: any) => {
+        setCurrent(page)
+    }
+
     return (
         <>
             <Button component='label' variant='contained' htmlFor='add-activity'
@@ -118,7 +136,7 @@ const Activities: React.FC<any> = () => {
             }
 
             <Box display={'flex'} flexWrap={'wrap'}>
-                {activities?.map((activity: any) =>
+                {DataPerPage?.map((activity: any) =>
                     <Card
                         key={activity.id}
                         variant='outlined'
@@ -144,14 +162,24 @@ const Activities: React.FC<any> = () => {
                                 <Typography variant="h5" component="div">
                                     {activity.type}
                                 </Typography>
-                                <IconButton color='error' onClick={() => delActivity(activity.id)}>
-                                    <IconTrashXFilled />
+                                <IconButton color='error' onClick={() => {
+                                    delActivity(activity.id)
+                                    SetClickItem(activity.id)
+                                }}>
+                                    {delLoading && activity.id == clickedItem
+                                        ? <CircularProgress size={30} color='error' />
+                                        : <IconTrashXFilled />}
                                 </IconButton>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 )
                 }
+                {NbPage != 1 && <Pagination color='primary'
+                    count={NbPage}
+                    page={current}
+                    onChange={handleChangePage} />}
+
                 <Dialog PaperProps={{
                     sx: {
                         width: "100%",
@@ -237,7 +265,7 @@ const Activities: React.FC<any> = () => {
                     </DialogContent>
 
                 </Dialog>
-            </Box>
+            </Box >
         </>
     );
 

@@ -310,7 +310,7 @@ const Chatbot = () => {
                 bubbleOptionStyle={{ backgroundColor: "#4ace3c", color: "white", width: 'auto' }}
                 steps={stepifyScript(user.role == "ADMIN" ? adminScript : steps)}
                 width={"400px"}
-                height={"600px"}
+                height={"500px"}
                 userAvatar={user?.image}
                 botAvatar={FIS_icon}
             />

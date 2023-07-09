@@ -22,8 +22,6 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
 
   const user = useStore((state: any) => state.user)
   const setTeammate = useStore((state: any) => state.setTeammate)
-  console.log(data)
-
 
   const [showForm, setShowForm] = useState(false);
   //const [parentNodeId, setParentNodeId] = useState<string | number>("");
@@ -64,6 +62,7 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
 
   const d3Container = useRef<any>(null);
   useLayoutEffect(() => {
+
     let compact = 0;
     if (data && d3Container.current) {
       chart
@@ -110,6 +109,9 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
           );
         }).svgHeight(800).render()
         .setCentered(myNode?.id).setHighlighted(myNode?.id).initialZoom(0.33).render();
+      if (user.role === "ADMIN") {
+        chart.expandAll().render().fit()
+      }
       //.setCentered(9).initialZoom(0.3).render();
       // d3.select('svg').attr("transform", "translate(0, 0)");   
     }

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-    Card, CardContent, Typography, Skeleton,
-    Button, Box, Grid, Dialog, DialogTitle,
-    DialogContent, DialogActions, TextField, Chip, IconButton
+    Card, CardContent, Typography, IconButton,
+    Button, Box, Grid, Dialog, DialogTitle, CircularProgress,
+    DialogContent, DialogActions, TextField, Chip, Pagination
 } from '@mui/material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { addQuestion, deleteQuestion, getQuestions } from '../../../features/api/api';
@@ -18,7 +18,7 @@ import SkeletonList from '../../../components/shared/SkeletonList';
 
 
 const QuestionSchema = object({
-    question: string().nonempty('Champ requis !'),
+    question: string().nonempty('Required !'),
 })
 export type QuestionInput = TypeOf<typeof QuestionSchema>;
 
@@ -31,6 +31,7 @@ const Activities: React.FC<any> = () => {
     const requestLoading = useStore((state: any) => state.requestLoading);
 
     const [open, setOpen] = useState(false);
+    const [clickedItem, SetClickItem] = useState(null)
 
     const {
         register,
@@ -47,12 +48,13 @@ const Activities: React.FC<any> = () => {
         getQuestions(token))
 
     //delete question
-    const { mutate: delQuestion } =
+    const { mutate: delQuestion, isLoading: deleteLoading } =
         useMutation((id: number) =>
             deleteQuestion(id, token), {
             onSuccess: () => {
                 queryClient.invalidateQueries('questions');
                 toast.success("Question deleted  successfully", { position: "bottom-center", autoClose: 800 });
+
             }
 
         });
@@ -61,6 +63,9 @@ const Activities: React.FC<any> = () => {
     const { mutate: addQues } =
         useMutation((question: string) =>
             addQuestion(question, token), {
+            onMutate: () => {
+                setRequestLoading(true)
+            },
             onSuccess: () => {
                 queryClient.invalidateQueries('questions');
                 toast.success("Question added  successfully", { position: "bottom-center", autoClose: 800 });
@@ -73,6 +78,20 @@ const Activities: React.FC<any> = () => {
     const onSubmitHandler: SubmitHandler<QuestionInput> = async (values) => {
         addQues(values.question);
     };
+
+    //pagination 
+    const items = 4;
+    const [current, setCurrent] = useState(1);
+    const NbPage = Math.ceil(questions?.length / items);
+
+    const startIndex = (current - 1) * items;
+    const endIndex = startIndex + items;
+
+    const DataPerPage = questions?.slice(startIndex, endIndex);
+    const handleChangePage = (e: any, page: any) => {
+        setCurrent(page)
+    }
+
 
     return (
         <>
@@ -91,9 +110,9 @@ const Activities: React.FC<any> = () => {
 
             </Button>
 
-            {isLoading && <SkeletonList rowsNum={5} h={80} />}
+            {isLoading && <SkeletonList rowsNum={4} h={80} />}
 
-            {questions?.map((question: Question) =>
+            {DataPerPage?.map((question: Question) =>
                 <Card key={question.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }} >
                         <Box display={"flex"} gap={2} alignItems={'center'}>
@@ -102,12 +121,21 @@ const Activities: React.FC<any> = () => {
                                 {question.question} ?
                             </Typography>
                         </Box>
-                        <IconButton color='error' onClick={() => delQuestion(question.id)}>
-                            <IconTrashXFilled />
-                        </IconButton>
+                        <IconButton color='error' onClick={() => {
+                            delQuestion(question.id)
+                            SetClickItem(question.id)
+                        }}>
+                            {deleteLoading && question.id == clickedItem
+                                ? <CircularProgress size={30} color='error' />
+                                : <IconTrashXFilled />}</IconButton>
                     </CardContent>
                 </Card >)
             }
+            {NbPage != 1 && <Pagination color='primary'
+                count={NbPage}
+                page={current}
+                onChange={handleChangePage} />}
+
             <Dialog PaperProps={{
                 sx: {
                     width: "100%",

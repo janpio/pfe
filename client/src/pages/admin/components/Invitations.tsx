@@ -1,7 +1,7 @@
-import React from 'react';
+import { useState } from 'react';
 import {
     Card, CardContent, Typography, Chip,
-    Box, Avatar
+    Box, Avatar, Pagination
 } from '@mui/material';
 import { useQuery } from 'react-query';
 import { getAllInvitations } from '../../../features/api/api';
@@ -17,10 +17,24 @@ const Invitation: React.FC<any> = () => {
     const { data: allInvitations, isLoading } = useQuery('allInvitations', () =>
         getAllInvitations(token));
 
+    //pagination 
+    const items = 3;
+    const [current, setCurrent] = useState(1);
+    const NbPage = Math.ceil(allInvitations?.length / items);
+
+    const startIndex = (current - 1) * items;
+    const endIndex = startIndex + items;
+
+    const DataPerPage = allInvitations?.slice(startIndex, endIndex);
+
+    const handleChangePage = (e: any, page: any) => {
+        setCurrent(page)
+    }
+
     if (isLoading) return <SkeletonList rowsNum={3} h={185.6} />
     return (
         <>
-            {allInvitations?.map((inv: any) =>
+            {DataPerPage?.map((inv: any) =>
                 <Card key={inv.id} variant="outlined" sx={{ mb: 2, boxShadow: 4 }} >
                     <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box display={"flex"} justifyContent={'space-between'} alignItems={'center'}>
@@ -84,6 +98,10 @@ const Invitation: React.FC<any> = () => {
                     </CardContent>
                 </Card >)
             }
+            {NbPage != 1 && <Pagination color='primary'
+                count={NbPage}
+                page={current}
+                onChange={handleChangePage} />}
         </>
     );
 

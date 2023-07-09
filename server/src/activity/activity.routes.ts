@@ -8,7 +8,8 @@ import {
     getInvitationsReceived,
     getInvitationsSent,
     changeInvitationStatus,
-    changeHasRead
+    changeHasRead,
+    deleteInvitation
 } from "./activity.controllers";
 //import { authMiddleware } from "..//middlewares/auth.middleware";
 
@@ -23,6 +24,7 @@ router.get('/getInvitationsReceived/:employeeId', getInvitationsReceived)
 router.get('/getInvitationsSent/:employeeId', getInvitationsSent)
 router.patch('/changeInvitationStatus/:invitationId', changeInvitationStatus)
 router.patch('/changeHasRead/:invitationId', changeHasRead)
+router.delete('/deleteInvitation/:invitationId', deleteInvitation)
 
 
 export default router

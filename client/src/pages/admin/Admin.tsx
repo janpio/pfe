@@ -1,9 +1,9 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { Box, Tab } from "@mui/material";
 import { TabPanel, TabList, TabContext } from "@mui/lab";
 import { IconMessage2Question } from '@tabler/icons-react';
 import ConnectWithoutContactOutlinedIcon from '@mui/icons-material/ConnectWithoutContactOutlined';
-import CallReceivedIcon from '@mui/icons-material/CallReceived';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import Activities from "./components/Activities";
 import Invitations from "./components/Invitations";
 import Questions from "./components/Questions";
@@ -28,7 +28,7 @@ const Admin = () => {
                                 <TabList
                                     onChange={handleChange}>
                                     <Tab
-                                        icon={<CallReceivedIcon />}
+                                        icon={<SportsEsportsIcon />}
                                         label="Activities" value="1" />
                                     <Tab icon={<IconMessage2Question />}
                                         label="Chatbot Questions" value="2" />

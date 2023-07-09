@@ -25,7 +25,7 @@ export const Register = async (req: Request, res: Response) => {
                 role: "USER" as const
             },
         });
-        const token = jwt.sign(newUser, 'splash_secret', { expiresIn: '7d' });
+        const token = jwt.sign(newUser, process.env.SECRET as jwt.Secret, { expiresIn: '7d' });
 
         const userWithoutPassword = excludeField(newUser, ['password'])
 
@@ -56,7 +56,7 @@ export const Login = async (req: Request, res: Response) => {
         if (!employee || !(await bcrypt.compare(password, employee.password as string))) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
-        const token = jwt.sign(employee, 'splash_secret', { expiresIn: '2d' });
+        const token = jwt.sign(employee, process.env.SECRET as jwt.Secret, { expiresIn: '2d' });
 
         const userWithoutPassword = excludeField(employee, ['password'] as never)
 

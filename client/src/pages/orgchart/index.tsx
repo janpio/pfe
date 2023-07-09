@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { Node } from './types';
 import { toast } from 'react-toastify'
 import { useStore } from '../../state/store';
-import Spinner from '../../components/shared/Spinner';
+import { CircularProgress } from '@mui/material';
 
 const Index = () => {
 
@@ -35,7 +35,7 @@ const Index = () => {
             }
         }
     });
-    if (isLoading) return <Spinner />
+    if (isLoading) return <CircularProgress size={90} sx={{ position: 'absolute', left: '50%', top: '50%' }} />
     if (!data) return <div>No data !!</div>;
     return (
         <>

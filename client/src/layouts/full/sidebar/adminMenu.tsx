@@ -20,7 +20,7 @@ const adminItems: MenuItemType[] = [
 
     {
         id: uniqueId(),
-        title: "Organigramme",
+        title: "Organizational Chart",
         icon: <GroupsOutlinedIcon />,
         href: '/teams',
     },

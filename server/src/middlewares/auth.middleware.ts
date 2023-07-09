@@ -12,7 +12,7 @@ export const authMiddleware = async (req: any, res: Response, next: NextFunction
     const token = authorization.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, 'splash_secret');
+        const decoded = jwt.verify(token, process.env.SECRET as jwt.Secret);
 
         req.user = decoded;
 
