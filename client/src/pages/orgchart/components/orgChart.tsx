@@ -52,10 +52,10 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
       teammates = data?.filter((d: any) => d.parentId == myNode.id)
     }
     else {
-      const supervisorNode = data?.filter((d: any) => d.id == myNode?.parentId)
+      //  const supervisorNode = data?.filter((d: any) => d.id == myNode?.parentId)
       teammates = getTeammatesNodes(data, myNode?.parentId)
       teammates = teammates.filter((teammate: any) => teammate?.name !== user?.name)
-      teammates = [...teammates, supervisorNode[0]]
+      // teammates = [...teammates, supervisorNode[0]]
     }
     localStorage.setItem('teammates', JSON.stringify(teammates))
   }, [])
