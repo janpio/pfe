@@ -179,12 +179,12 @@ const InvitationsReceived: React.FC<any> = () => {
                     </CardContent>
                 </Card >)
             }
-            {
-                NbPage != 1 && <Pagination color='primary'
-                    count={NbPage}
-                    page={current}
-                    onChange={handleChangePage} />
-            }
+
+            <Pagination color='primary'
+                count={NbPage}
+                page={current}
+                onChange={handleChangePage} />
+
         </>
     );
 
