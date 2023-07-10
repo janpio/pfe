@@ -7,8 +7,8 @@ import { Node } from '../../pages/orgchart/types';
 import { transformData } from '../../pages/orgchart/utils';
 
 
-//const BASE_URL = 'https://pfe-frontend-last.vercel.app/api/';
-const BASE_URL = 'http://localhost:3001/api/';
+const BASE_URL = 'https://pfe-frontend-last.vercel.app/api/';
+//const BASE_URL = 'http://localhost:3001/api/';
 
 
 export const api = axios.create({
