@@ -4,7 +4,7 @@ import { checkRole } from "..//middlewares/checkRole.middleware";
 
 const router = Router();
 
-router.patch('/ChangeProfilePhoto/:employeeId', checkRole(["USER"]), ChangeProfilePhoto)
+router.patch('/ChangeProfilePhoto/:employeeId', ChangeProfilePhoto)
 
 
 export default router
