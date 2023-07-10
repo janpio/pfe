@@ -50,6 +50,12 @@ export const deleteQuestion = async (req: Request, res: Response) => {
 };
 export const saveResponse = async (req: Request, res: Response) => {
     const { questionId, response, employeeId } = req.body;
+    const user = req.user;
+
+    if (user.id != Number(employeeId)) {
+        return res.status(401).json({ error: "Unauthorized !" })
+    }
+
     try {
         const userResponse = await prisma.response.create({
             data: {
