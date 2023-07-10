@@ -5,6 +5,6 @@
  
  Used "d3-org-chart" library for making the organizational chart.
  
- Used "react-simple-chatbot" library to implement the chatbot.
+ Used "react-simple-chatbot" library to implement the chatbot.  
  
 
