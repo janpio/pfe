@@ -75,6 +75,9 @@ const Activities: React.FC<any> = () => {
     const { mutate: addNewActivity } =
         useMutation((activity: Activity) =>
             addActivity(activity, token), {
+            onError: () => {
+                setRequestLoading(false);
+            },
             onSuccess: () => {
                 queryClient.invalidateQueries('activities');
                 toast.success("Activity added successfully", { position: "bottom-center", autoClose: 800 });

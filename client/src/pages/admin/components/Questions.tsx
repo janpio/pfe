@@ -66,6 +66,9 @@ const Activities: React.FC<any> = () => {
             onMutate: () => {
                 setRequestLoading(true)
             },
+            onError: () => {
+                setRequestLoading(false);
+            },
             onSuccess: () => {
                 queryClient.invalidateQueries('questions');
                 toast.success("Question added  successfully", { position: "bottom-center", autoClose: 800 });
