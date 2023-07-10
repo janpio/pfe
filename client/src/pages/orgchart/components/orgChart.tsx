@@ -22,6 +22,7 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
 
   const user = useStore((state: any) => state.user)
   const setTeammate = useStore((state: any) => state.setTeammate)
+  const setTeammates = useStore((state: any) => state.setTeammates)
 
   const [showForm, setShowForm] = useState(false);
   //const [parentNodeId, setParentNodeId] = useState<string | number>("");
@@ -52,11 +53,12 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
       teammates = data?.filter((d: any) => d.parentId == myNode.id)
     }
     else {
-      //  const supervisorNode = data?.filter((d: any) => d.id == myNode?.parentId)
+      const supervisorNode = data?.filter((d: any) => d.id == myNode?.parentId)
       teammates = getTeammatesNodes(data, myNode?.parentId)
       teammates = teammates.filter((teammate: any) => teammate?.name !== user?.name)
-      // teammates = [...teammates, supervisorNode[0]]
+      teammates = [...teammates, supervisorNode[0]]
     }
+    const setTeammates = useStore((state: any) => state.setTeammates)
     localStorage.setItem('teammates', JSON.stringify(teammates))
   }, [])
 

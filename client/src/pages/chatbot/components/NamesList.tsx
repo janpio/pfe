@@ -8,9 +8,9 @@ import { useStore } from '../../../state/store';
 
 export default function NamesList({ triggerNextStep }: any) {
 
-    const teammates = useStore((state: any) => state?.teammates)
-    const setTeammate = useStore((state: any) => state?.setTeammate)
-    const teammate = useStore((state: any) => state?.teammate)
+    const teammates = useStore((state: any) => state.teammates)
+    const setTeammate = useStore((state: any) => state.setTeammate)
+    const teammate = useStore((state: any) => state.teammate)
 
     const handleChange = (event: SelectChangeEvent) => {
         setTeammate(event.target.value);
@@ -26,7 +26,7 @@ export default function NamesList({ triggerNextStep }: any) {
                     value={teammate || ""}
                     label="employés"
                     onChange={handleChange}>
-                    {teammates?.map((item: any) =>
+                    {teammates && teammates?.map((item: any) =>
                         <MenuItem value={item?.name} key={item?.id}>{item?.name}</MenuItem>
                     )}
                 </Select>

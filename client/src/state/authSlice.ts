@@ -27,7 +27,7 @@ export type authSliceType = {
     user?: User | Supervisor | null;
     token?: string | null
     requestLoading?: boolean
-    setTeammates: (teammates: Array<User> | null) => void,
+    // setTeammates: (teammates: Array<User> | null) => void,
     setRequestLoading: (isLoading: boolean) => void;
     login: (user: User | Supervisor, token: string) => void;
     logout: () => void
