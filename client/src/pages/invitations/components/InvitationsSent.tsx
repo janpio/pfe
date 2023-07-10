@@ -38,7 +38,7 @@ const InvitationsSent: React.FC<any> = () => {
         });
 
     //pagination 
-    const items = 4;
+    const items = 3;
     const [current, setCurrent] = useState(1);
     const NbPage = Math.ceil(invisSent?.length / items);
 
