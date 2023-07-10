@@ -44,7 +44,7 @@ const Profile = () => {
         setRequestLoading(true);
         form.append("file", file as any);
         form.append("upload_preset", "splash");
-        const response = await axios.post("http://api.cloudinary.com/v1_1/dsjjqkvf1/upload", form);
+        const response = await axios.post("https://api.cloudinary.com/v1_1/dsjjqkvf1/upload", form);
         const imageLink = await response.data.secure_url;
         changePhoto(imageLink);
         let user = localStorage.getItem("user");
