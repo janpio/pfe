@@ -58,7 +58,7 @@ const OrganizationalChart: FC<OrganizationalChartProps> = ({ data }) => {
       teammates = teammates.filter((teammate: any) => teammate?.name !== user?.name)
       teammates = [...teammates, supervisorNode[0]]
     }
-    const setTeammates = useStore((state: any) => state.setTeammates)
+    setTeammates(teammates);
     localStorage.setItem('teammates', JSON.stringify(teammates))
   }, [])
 
